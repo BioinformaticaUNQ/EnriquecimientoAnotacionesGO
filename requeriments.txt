@@ -1,0 +1,4 @@
+requests
+pandas
+biopython
+goatools
