@@ -2,7 +2,7 @@ from integraciones.uniprot_client import *
 
 def main():
     uniprotClient=UniprotClient()
-    response = uniprotClient.get()
+    response = uniprotClient.getProtein()
     print (response.content)
 
 
