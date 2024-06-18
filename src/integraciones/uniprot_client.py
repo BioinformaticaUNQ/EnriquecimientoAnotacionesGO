@@ -1,11 +1,19 @@
 import requests
+import json
 class UniprotClient:
     def __init__(self):
-        #first time example
-        self.uniprotId="9606"
-        self.url= "https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+"
-        self.url= self.url + "organism_id:"+self.uniprotId
-        self.url= self.url + "&format=fasta"
+        #Set all types of headers for uniprot
+        self.headers={"Accept":"application/json"}
         
-    def getProtein(self):
-        return requests.get(self.url)
+        
+        self.url="https://rest.uniprot.org/uniprotkb/"
+
+        
+        
+        
+    def getSequenceFromProtein(self, protein):
+
+        response=  requests.get(self.url+protein,headers=self.headers)
+        data = json.loads(response.content)
+
+        return data['sequence']['value']
