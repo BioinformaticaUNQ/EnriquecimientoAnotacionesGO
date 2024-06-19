@@ -1,5 +1,10 @@
 from integraciones.uniprot_client import *
 import click
+from integraciones.run_blast import *
+
+def saveProteinFasta(filename, protein):
+    with open("src/integraciones/proteins/" + filename + ".fasta", "a") as file:
+        file.write("> " + filename + "\n" + protein)
 
 @click.group()
 def main():
@@ -13,8 +18,24 @@ def query_protein(protein):
 
     response = uniprotClient.getSequenceFromProtein(protein)
     
+    saveProteinFasta(protein, response)
     print (response)
-    
+
+@main.command()
+@click.argument('protein', required=True)
+@click.argument('database', required=True)
+def run_blast(protein, database):
+
+    result = check_db(database)
+
+    if result == 2:
+        dbfile = input("Database not found, insert database file: ")
+
+    add_database(dbfile, database)
+
+    run_query(protein, database)
+
 
 if __name__ == '__main__':
     main()
+
