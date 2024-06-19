@@ -1,9 +1,15 @@
 from integraciones.uniprot_client import *
 import click
 from integraciones.run_blast import *
+import os
 
 def saveProteinFasta(filename, protein):
-    with open("src/integraciones/proteins/" + filename + ".fasta", "a") as file:
+
+    newpath = "./integraciones/proteins"
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+
+    with open(newpath + "/" + filename + ".fasta", "a") as file:
         file.write("> " + filename + "\n" + protein)
 
 @click.group()
