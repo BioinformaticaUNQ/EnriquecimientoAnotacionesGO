@@ -9,7 +9,7 @@ def saveProteinFasta(filename, protein):
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
-    with open(newpath + "/" + filename + ".fasta", "a") as file:
+    with open(newpath + "/" + filename + ".fasta", "w") as file:
         file.write("> " + filename + "\n" + protein)
 
 @click.group()
