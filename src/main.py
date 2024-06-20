@@ -42,6 +42,18 @@ def run_blast(protein, database):
     run_query(protein, database)
 
 
+@main.command()
+def  help():
+
+    print ("help")
+    print ("Muestra una breve descripcion de los comandos disponibles")
+
+    print ("query-protein [codigoUniprot]")
+    print ("Retorna una secuencia de aminoacidos para la proteina solicitada.")
+
+    print ("run-blast [proteina] [baseDeDatos]")
+    print ("Ejecuta una corrida blast y retorna los resultados de tal corrida.")
+
 if __name__ == '__main__':
     main()
 
