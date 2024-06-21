@@ -42,3 +42,17 @@ source venv/bin/activate
 ```bash
 pip install -r requeriments.txt
 ```
+
+
+## Uso
+
+Podes ejecutar con los siguientes comandos:
+
+query-protein [codigoUniprot]
+Retorna una secuencia de aminoacidos para la proteina solicitada.
+
+run-blast [proteina] [baseDeDatos] 
+Ejecuta una corrida blast y retorna los resultados de tal corrida.
+
+get-goterms[codigoUniprot]
+Retorna los terminos go para una proteina.

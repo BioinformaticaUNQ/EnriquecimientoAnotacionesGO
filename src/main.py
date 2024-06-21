@@ -18,7 +18,17 @@ def saveProteinFasta(filename, protein):
 def main():
     pass
 
-@main.command()
+@main.command(short_help='Retorna los terminos go para una proteina.')
+@click.argument('protein', required=True)
+def get_GoTerms(protein):
+    uniprotClient=UniprotClient()
+
+    response = uniprotClient.getCrossReferences(protein)
+    
+    print (response)
+
+
+@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
 @click.argument('protein', required=True)
 def query_protein(protein):
 
@@ -31,7 +41,7 @@ def query_protein(protein):
     saveProteinFasta(protein, response)
     print (response)
 
-@main.command()
+@main.command(short_help="Ejecuta una corrida blast y retorna los resultados de tal corrida.")
 @click.argument('protein')
 @click.argument('database')
 @click.option('-h', '--help', is_flag=True , show_default=True, default=False, help="See blast parameters")
@@ -53,4 +63,3 @@ def run_blast(protein, database, h):
 
 if __name__ == '__main__':
     main()
-
