@@ -3,6 +3,8 @@ import click
 from integraciones.run_blast import *
 import os
 
+## pathlib
+
 def saveProteinFasta(filename, protein):
 
     newpath = "./integraciones/proteins"
@@ -19,6 +21,8 @@ def main():
 @main.command()
 @click.argument('protein', required=True)
 def query_protein(protein):
+
+
     uniprotClient=UniprotClient()
     #default test protein
 
@@ -28,10 +32,15 @@ def query_protein(protein):
     print (response)
 
 @main.command()
-@click.argument('protein', required=True)
-@click.argument('database', required=True)
-def run_blast(protein, database):
+@click.argument('protein')
+@click.argument('database')
+@click.option('-h', '--help', is_flag=True , show_default=True, default=False, help="See blast parameters")
+def run_blast(protein, database, h):
 
+    if (h):
+        show_help()
+        return
+    
     result = check_db(database)
 
     if result == 2:
