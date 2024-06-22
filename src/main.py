@@ -2,6 +2,7 @@ from integraciones.uniprot_client import *
 import click
 from integraciones.run_blast import *
 import os
+import sys
 
 ## pathlib
 
@@ -41,24 +42,34 @@ def query_protein(protein):
     saveProteinFasta(protein, response)
     print (response)
 
-@main.command(short_help="Ejecuta una corrida blast y retorna los resultados de tal corrida.")
-@click.argument('protein')
-@click.argument('database')
-@click.option('-h', '--help', is_flag=True , show_default=True, default=False, help="See blast parameters")
-def run_blast(protein, database, h):
 
-    if (h):
-        show_help()
-        return
+
+class HelpfulCmd(click.Command):
+    def format_help(self, ctx, formatter):
+        click.echo(show_help())
+
+
+@main.command(short_help="Ejecuta una corrida blast y retorna los resultados de tal corrida.", 
+              cls=HelpfulCmd,
+              context_settings=dict(
+                ignore_unknown_options=True,
+                allow_extra_args=True,
+))
+@click.argument('protein', required= True)
+@click.argument('database',required= True)
+def run_blast(protein, database):
+
     
-    result = check_db(database)
+    # result = check_db(database)
 
-    if result == 2:
-        dbfile = input("Database not found, insert database file: ")
+    # if result == 2:
+    #     dbfile = input("Database not found, insert database file: ")
 
-    add_database(dbfile, database)
+    # add_database(dbfile, database)
 
-    run_query(protein, database)
+    
+    print(  )
+    run_query(protein, database, sys.argv[4:])
 
 
 if __name__ == '__main__':
