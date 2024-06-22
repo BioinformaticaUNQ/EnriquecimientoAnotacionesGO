@@ -1,4 +1,5 @@
 from integraciones.uniprot_client import *
+
 import click
 from integraciones.run_blast import *
 import os
@@ -35,12 +36,18 @@ def query_protein(protein):
 
 
     uniprotClient=UniprotClient()
-    #default test protein
 
-    response = uniprotClient.getSequenceFromProtein(protein)
+    try:
+        response = uniprotClient.getSequenceFromProtein(protein)
+        saveProteinFasta(protein, response)
+        print (response)
+    except InvalidRequestException:
+        InvalidRequestException.printMe()
+    except Exception:
+        print ("OCURRIÓ UN ERROR INESPERADO")
     
-    saveProteinFasta(protein, response)
-    print (response)
+    
+    
 
 
 

@@ -1,28 +1,36 @@
 import requests
 import json
+
+class InvalidRequestException(Exception):
+    "Ocurrió un error en la consulta. Verifique el código Uniprot"
+    pass
+
+    def printMe():
+        print ("Ocurrió un error en la consulta. Verifique el código Uniprot")
+
 class UniprotClient:
     def __init__(self):
-        #Set all types of headers for uniprot
-        self.headers={"Accept":"application/json"}
+        self.headers={"Accept":"application/json"}       
+        self.url="https://rest.uniprot.org/uniprotkb/"   
         
-        
-        self.url="https://rest.uniprot.org/uniprotkb/"
-
-        
-        
-        
-    def getSequenceFromProtein(self, uniprotId):
-
-        response=  requests.get(self.url+uniprotId,headers=self.headers)
-        data = json.loads(response.content)
-
-        return data['sequence']['value']
 
     def getProteinDetail(self,uniprotId):
+        #Dada una uniprot ID retorna una proteina en detalle 
         response=  requests.get(self.url+uniprotId,headers=self.headers)
+        if response.status_code!=200:
+                raise InvalidRequestException
         return json.loads(response.content)
     
+        
+    def getSequenceFromProtein(self, uniprotId):
+        #Dada una Uniprot ID retorna una secuencia 
+        
+        response=  self.getProteinDetail(uniprotId)
+        return response['sequence']['value']
+        
+    
     def getProteinDetailByKey(self,uniprotId,key):
+        #Dada una uniprot id y una clave retorna solo el valor de la clave
         return self.getProteinDetail(uniprotId)[key]
     
     def getCrossReferences(self,uniprotId):
@@ -33,14 +41,15 @@ class UniprotClient:
                 goTerm=""
                 goEvidence=""
                 for y in x['properties']:
-                    if y['key']=="GoTerm":
-                        goTerm=y['value']
-                    if y['key']=="GoEvidenceType":
-                        goEvidence=y['value']
+                    if y.key=="GoTerm":
+                        goTerm=y.value
+                    if y.key=="GoEvidenceType":
+                        goEvidence=y.value
                     
-                goNotations.append([x['id'],goTerm,goEvidence])
+                goNotations.append([x['id'],goTe])
 
         return (goNotations)
     
+
 
     
