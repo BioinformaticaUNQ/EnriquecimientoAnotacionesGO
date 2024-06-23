@@ -1,11 +1,13 @@
 from integraciones.uniprot_client import *
-
 import click
 from integraciones.run_blast import *
 import os
 import sys
+from integraciones.go_terms import *
 
 ## pathlib
+
+uniprotClient=UniprotClient()
 
 def saveProteinFasta(filename, protein):
 
@@ -29,6 +31,22 @@ def get_GoTerms(protein):
     
     print (response)
 
+
+@main.command(short_help='Compara Los GoTerms de 2 proteinas y devuelve un resultado.')
+@click.argument('proteinone', required=True)
+@click.argument('proteintwo', required=True)
+def compare_goterms(proteinone, proteintwo):
+    go_terms1 = uniprotClient.getGoTerms(proteinone)
+    go_terms2 = uniprotClient.getGoTerms(proteintwo)
+
+    if go_terms1 is None or go_terms2 is None:
+        print("No se pudieron obtener los términos GO para uno o ambos ID")
+        return
+
+    print(f"Términos GO para {proteinone}: {go_terms1}")
+    print(f"Términos GO para {proteintwo}: {go_terms2}")
+    
+    compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
 @main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
 @click.argument('protein', required=True)
