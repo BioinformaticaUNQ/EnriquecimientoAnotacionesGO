@@ -48,14 +48,22 @@ pip install -r requeriments.txt
 
 Podes ejecutar con los siguientes comandos:
 
-query-protein [codigoUniprot]
 Retorna una secuencia de aminoacidos para la proteina solicitada.
+```bash
+query-protein [codigoUniprot]
+```
 
-run-blast [proteina] [baseDeDatos] 
 Ejecuta una corrida blast y retorna los resultados de tal corrida.
+```bash
+run-blast [proteina] [baseDeDatos] 
+```
 
-get-goterms[codigoUniprot]
 Retorna los terminos go para una proteina.
+```bash
+get-goterms[codigoUniprot]
+```
 
-compare-goterms [codigoUniprot1] [codigoUniprot2]
 Obtiene y compara los GoTerms dados por parametro.
+```bash
+compare-goterms [codigoUniprot1] [codigoUniprot2]
+```
