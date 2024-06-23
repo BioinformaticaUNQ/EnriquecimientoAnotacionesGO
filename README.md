@@ -56,3 +56,6 @@ Ejecuta una corrida blast y retorna los resultados de tal corrida.
 
 get-goterms[codigoUniprot]
 Retorna los terminos go para una proteina.
+
+compare-goterms [codigoUniprot1] [codigoUniprot2]
+Obtiene y compara los GoTerms dados por parametro.
