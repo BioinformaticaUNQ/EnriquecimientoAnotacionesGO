@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-from integraciones.uniprot_client import UniprotClient, InvalidRequestException
 
-=======
 from integraciones.uniprot_client import *
->>>>>>> 3f967bc7aa60500f6dfbc349df6b94e4b6916525
 import click
 from integraciones.run_blast import *
 import os
