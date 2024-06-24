@@ -32,23 +32,35 @@ class UniprotClient:
     def getProteinDetailByKey(self,uniprotId,key):
         #Dada una uniprot id y una clave retorna solo el valor de la clave
         return self.getProteinDetail(uniprotId)[key]
-    
+            
     def getCrossReferences(self,uniprotId):
-        goNotations =[]
         references=self.getProteinDetailByKey(uniprotId,'uniProtKBCrossReferences')
+        return self.getGoTermsResultMap(references,True)
+    
+    ## Devuelvo los GoTerms en una lista, si fullValue es true termino retornando el value y su GoEvidence
+    def getGoTermsResultMap(self,references,fullValue):
+        result = []
         for x in references:
             if x['database']=="GO":
-                goTerm=""
-                goEvidence=""
-                for y in x['properties']:
-                    if y.key=="GoTerm":
-                        goTerm=y.value
-                    if y.key=="GoEvidenceType":
-                        goEvidence=y.value
-                    
-                goNotations.append([x['id'],goTe])
+                if(fullValue):
+                    goTerm=""
+                    goEvidence=""
+                    for y in x['properties']:
+                        print('properties:', y)
+                        if y['key']=="GoTerm":
+                            goTerm=y['value']
+                        if y['key']=="GoEvidenceType":
+                            goEvidence=y['value']
 
-        return (goNotations)
+                    result.append([x['id'],goTerm])##TODO: falta agregar el goEvidence, como deberiamos manejarlo?
+                else:
+                    result.append(x['id'])
+        return result
+
+    ## devuelvo solo los ids de los GOTerms en una lista.                
+    def getGoTerms(self,uniprotId):
+        references=self.getProteinDetailByKey(uniprotId,'uniProtKBCrossReferences')
+        return self.getGoTermsResultMap(references,False)
     
 
 
