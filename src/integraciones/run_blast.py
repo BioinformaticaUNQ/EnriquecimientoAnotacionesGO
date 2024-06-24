@@ -15,8 +15,9 @@ def print_output(subprocess):
 
 def check_db(database):
     command_path = os.path.join(blast_path, "blastdbcmd")
+    db_path = os.path.join(current_path, "integraciones/db", database)
 
-    args = (command_path, "-db", database, "-info")
+    args = (command_path, "-db", db_path, "-info")
     popen = subprocess.Popen(args, stdout=subprocess.PIPE )
     popen.wait()
     # output = popen.stdout.read()
@@ -26,9 +27,10 @@ def check_db(database):
 
 def add_database(filename, database):
     command_path = os.path.join(blast_path, "makeblastdb")
+    db_path = os.path.join(current_path, "integraciones/db", database)
 
     args = (command_path, "-in", filename,
-            "-dbtype", "prot", "-out", "src/integraciones/db/" + database)
+            "-dbtype", "prot", "-out", db_path)
     popen = subprocess.Popen(args, stdout=subprocess.PIPE)
     popen.wait()
     print_output(popen)

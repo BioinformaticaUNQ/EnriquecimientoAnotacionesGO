@@ -1,4 +1,4 @@
-from integraciones.uniprot_client import *
+from integraciones.uniprot_client import UniprotClient, InvalidRequestException
 
 import click
 from integraciones.run_blast import *
@@ -53,6 +53,7 @@ def query_protein(protein):
 
 class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
+        click.echo("Usage: main.py run-blast PROTEIN DATABASE [OPTIONS]")
         click.echo(show_help())
 
 
@@ -67,15 +68,12 @@ class HelpfulCmd(click.Command):
 def run_blast(protein, database):
 
     
-    # result = check_db(database)
+    result = check_db(database)
 
-    # if result == 2:
-    #     dbfile = input("Database not found, insert database file: ")
+    if result == 2:
+        dbfile = input("Database not found, insert database file: ")
+        add_database(dbfile, database)
 
-    # add_database(dbfile, database)
-
-    
-    print(  )
     run_query(protein, database, sys.argv[4:])
 
 
