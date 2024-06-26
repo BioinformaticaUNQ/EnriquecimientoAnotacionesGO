@@ -78,8 +78,9 @@ def query_protein(protein):
 
 class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
-        click.echo("Usage: main.py run-blast PROTEIN DATABASE [OPTIONS]")
+        click.echo("USAGE: main.py run-blast PROTEIN DATABASE [OPTIONS]")
         click.echo(show_help())
+        click.echo("-outfmt ha sido desabilitado")
 
 
 @main.command(short_help="Ejecuta una corrida blast y retorna los resultados de tal corrida.", 
@@ -92,14 +93,23 @@ class HelpfulCmd(click.Command):
 @click.argument('database',required= True)
 def run_blast(protein, database):
 
-    
-    result = check_db(database)
+    args = sys.argv[4:]
 
-    if result == 2:
+    print(args)
+
+    if ("-outfmt" in args):
+
+        outIndex = args.index("-outfmt")
+        
+
+        args.pop(outIndex)
+        args.pop(outIndex)
+
+    if not "-remote" in args and check_db(database) == 2:
         dbfile = input("Database not found, insert database file: ")
         add_database(dbfile, database)
 
-    run_query(protein, database, sys.argv[4:])
+    run_query(protein, database, args)
 
 
 
