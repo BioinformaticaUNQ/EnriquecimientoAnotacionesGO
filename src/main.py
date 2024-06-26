@@ -49,21 +49,27 @@ def compare_goterms(proteinone, proteintwo):
     
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
-@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
-@click.argument('protein', required=True)
-def query_protein(protein):
 
 
+
+def getProteinFromUniprot(uniprotId):
     uniprotClient=UniprotClient()
 
     try:
-        response = uniprotClient.getSequenceFromProtein(protein)
-        saveProteinFasta(protein, response)
+        response = uniprotClient.getSequenceFromProtein(uniprotId)
+        saveProteinFasta(uniprotId, response)
         print (response)
     except InvalidRequestException:
         InvalidRequestException.printMe()
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
+
+@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
+@click.argument('protein', required=True)
+def query_protein(protein):
+
+
+    getProteinFromUniprot(protein)
     
     
     
@@ -94,6 +100,33 @@ def run_blast(protein, database):
         add_database(dbfile, database)
 
     run_query(protein, database, sys.argv[4:])
+
+
+
+def readFile(filename):
+    try:
+        file = open(filename, "r") 
+        lines= file.read().splitlines()
+        file.close() 
+        return lines
+    except FileNotFoundError:
+        print ("El archivo indicado no existe")
+
+@main.command(short_help='Lee desde archivo los diferentes codigos uniprot')
+@click.argument('filename', required=True)
+def read_file(filename):
+
+    uniprotCodes =readFile(filename)
+    if uniprotCodes!=None:
+
+        for eachUniprotCode in uniprotCodes:
+            try:
+                getProteinFromUniprot(eachUniprotCode)
+            except InvalidRequestException:
+                InvalidRequestException.printMe()
+            
+    
+
 
 
 if __name__ == '__main__':
