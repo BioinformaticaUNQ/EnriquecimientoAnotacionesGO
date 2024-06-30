@@ -1,6 +1,9 @@
 import subprocess
 import os
-import pathlib
+import urllib.request
+import gzip
+import shutil
+
 
 current_path = os.getcwd()
 blast_path = os.path.join(current_path, "integraciones/ncbi-blast-2.15.0+/bin")
@@ -47,7 +50,7 @@ def run_query(protein, database, blast_args):
     protein_path = os.path.join(current_path, "integraciones/proteins", protein + ".fasta")
 
     args = (command_path, "-db", db_path,
-            "-query", protein_path, "-outfmt", "13")
+            "-query", protein_path, "-outfmt", "0")
     
     for arg in blast_args:
         args = args + (arg,)
@@ -66,8 +69,21 @@ def show_help():
     print_output(popen)
 
 
-def run_remote_query(protein, database):
-    pass
+def download_database(database):
+
+    if (database == "swissprot"):
+        urllib.request.urlretrieve("https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz", database + ".gz")
+
+    else:
+        urllib.request.urlretrieve("https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.fasta.gz", database + ".gz")
+
+    with gzip.open(database + '.gz', 'rb') as f_in:
+        with open (database + ".fasta", "wb") as f_out:
+            shutil.copyfileobj(f_in, f_out)
+
+    add_database(database + ".fasta", database)
+    os.remove(database + ".gz")
+    os.remove(database + ".fasta")
 
 
 # command_path, "-db", "src/integraciones/db/" + database,

@@ -6,6 +6,7 @@ import os
 import sys
 from integraciones.go_terms import *
 
+
 ## pathlib
 
 uniprotClient=UniprotClient()
@@ -65,10 +66,6 @@ def query_protein(protein):
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
     
-    
-    
-
-
 
 class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
@@ -89,8 +86,6 @@ def run_blast(protein, database):
 
     args = sys.argv[4:]
 
-    print(args)
-
     if ("-outfmt" in args):
 
         outIndex = args.index("-outfmt")
@@ -104,6 +99,18 @@ def run_blast(protein, database):
         add_database(dbfile, database)
 
     run_query(protein, database, args)
+
+
+@main.command(short_help='Download Uniprot/Swissprot or Uniprot/Trembl databases.')
+@click.option('--swissprot', is_flag=True, default= False )
+@click.option('--trembl', is_flag=True, default= False )
+def get_database(swissprot, trembl):
+
+    if (swissprot and check_db('swissprot') == 2):
+        download_database('swissprot')
+
+    if (trembl and check_db('trembl') == 2):
+        pass
 
 
 if __name__ == '__main__':
