@@ -1,7 +1,7 @@
 
 from integraciones.uniprot_client import *
 import click
-from integraciones.run_blast import *
+from integraciones.blast_client import *
 import os
 import sys
 from integraciones.go_terms import *
