@@ -3,6 +3,13 @@ from goatools.base import download_go_basic_obo
 
 #Lee el archivo .obo y retorna una lista de términos.
 def read_field(file_path):
+
+    #TODO: agregar un if para cheuqear que el archivo exista, si no existe hay que descargarlo o mostrar un help
+
+    if not os.path.exists(file_path):
+        print(f"The file {file_path} does not exist. We proceed to download it.")
+        download_go_term_field()
+    
     with open(file_path, 'r') as file:
         contenido = file.read()
         
@@ -48,18 +55,18 @@ def download_go_term_field():
     # Verificar si el archivo existe y borrarlo si es así
     if os.path.exists(destino):
         os.remove(destino)
-        print(f"Archivo existente {destino} eliminado.")
+        print(f"Existing file {destino} deleted.")
 
     # Descargar el archivo
     download_go_basic_obo(obo=destino)
 
-    print(f"Archivo descargado y guardado en {destino}")
+    print(f"File downloaded and saved in {destino}")
 
 
 def show_go_terms(go_terms):
 
     if(not go_terms):
-        print("No Hay Valores")
+        print("There are no values")
     else:
         for go_term in go_terms:
             print(f"ID: {go_term['id']}\nName: {go_term['name']}\nNamespace: {go_term['namespace']}\n")
@@ -77,14 +84,14 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
 
      
     go_common_enrichment = get_name_namespace_from_field(terminos,common)
-    print("Términos GO comunes: \n")
+    print("Common GO terms: \n")
     show_go_terms(go_common_enrichment)
 
     go_terms1_enrichment = get_name_namespace_from_field(terminos,unique1)
-    print(f"Términos GO únicos para {uniprot_id1}: \n")
+    print(f"Unique GO terms for {uniprot_id1}: \n")
     show_go_terms(go_terms1_enrichment)
 
     go_terms2_enrichment = get_name_namespace_from_field(terminos,unique2)
-    print(f"Términos GO únicos para {uniprot_id2}: \n")
+    print(f"Unique GO terms for{uniprot_id2}: \n")
     show_go_terms(go_terms2_enrichment)
 
