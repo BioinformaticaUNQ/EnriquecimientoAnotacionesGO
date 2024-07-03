@@ -74,7 +74,7 @@ class HelpfulCmd(click.Command):
         click.echo("-outfmt ha sido desabilitado")
 
 
-@main.command(short_help="Ejecuta una corrida blast y retorna los resultados de tal corrida.", 
+@main.command(short_help="Run a blast protein query.", 
               cls=HelpfulCmd,
               context_settings=dict(
                 ignore_unknown_options=True,

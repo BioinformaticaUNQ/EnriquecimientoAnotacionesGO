@@ -19,7 +19,7 @@ def print_output(subprocess):
 
 def check_db(database):
     command_path = os.path.join(blast_path, "blastdbcmd")
-    db_path = os.path.join(current_path, "integraciones/db", database)
+    db_path = os.path.join(path.parent, "integraciones/db", database)
 
     args = (command_path, "-db", db_path, "-info")
     popen = subprocess.Popen(args, stdout=subprocess.PIPE )
@@ -31,7 +31,7 @@ def check_db(database):
 
 def add_database(filename, database):
     command_path = os.path.join(blast_path, "makeblastdb")
-    db_path = os.path.join(current_path, "integraciones/db", database)
+    db_path = os.path.join(path.parent, "integraciones/db", database)
 
     args = (command_path, "-in", filename, "-parse_seqids",
             "-dbtype", "prot", "-out", db_path)
@@ -47,8 +47,8 @@ def run_query(protein, database, blast_args):
     if ("-remote" in blast_args):
         db_path = database
     else:
-        db_path = os.path.join(current_path, "integraciones/db", database)
-    protein_path = os.path.join(current_path, "integraciones/proteins", protein + ".fasta")
+        db_path = os.path.join(path.parent, "integraciones/db", database)
+    protein_path = os.path.join(path.parent, "integraciones/proteins", protein + ".fasta")
 
     args = (command_path, "-db", db_path,
             "-query", protein_path, "-outfmt", "15")
@@ -87,9 +87,8 @@ def download_database(database):
     os.remove(database + ".fasta")
 
 
-def save_ids():
+def save_ids(file_path):
 
-    file_path = path.parent.joinpath("resultados.json")
     with open(file_path) as file:
         prots = json.load(file)
 
@@ -98,12 +97,10 @@ def save_ids():
     # for match in matchs:
     #      print(match["description"][0]["accession"])#["description"]["accession"])
 
-    ids = [match["description"][0]["accession"] for match in matchs]#["description"]["accession"] ]
+    ids = [match["description"][0]["accession"] for match in matchs]
     return (ids)
 
 
 
 # command_path, "-db", "src/integraciones/db/" + database,
 #             "-query", "src/integraciones/proteins/" + protein + ".fasta", "-out", "results.out")
-
-save_ids()
