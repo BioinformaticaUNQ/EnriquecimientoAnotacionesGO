@@ -2,11 +2,11 @@ import requests
 import json
 
 class InvalidRequestException(Exception):
-    "Ocurrió un error en la consulta. Verifique el código Uniprot"
+    "An error has ocurred on the request. Please check Uniprot Id"
     pass
 
     def printMe():
-        print ("Ocurrió un error en la consulta. Verifique el código Uniprot")
+        print ("An error has ocurred on the request. Please check Uniprot Id")
 
 class UniprotClient:
     def __init__(self):

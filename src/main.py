@@ -5,7 +5,8 @@ from integraciones.run_blast import *
 import os
 import sys
 from integraciones.go_terms import *
-
+from integraciones.QuickGoClient import *
+import climage
 ## pathlib
 
 uniprotClient=UniprotClient()
@@ -138,8 +139,29 @@ def read_file(filename):
             except InvalidRequestException:
                 InvalidRequestException.printMe()
             
-    
 
+@main.command(short_help='Get Go Term Chart')
+@click.argument('goTerm',required=True)
+def get_chart(goterm):
+    try:
+        client = QuickGoClient()
+        print (client.getChartById(goterm))
+        
+        
+    except InvalidRequestQuickGoException:
+        InvalidRequestQuickGoException.printMe()
+    except Exception:
+        print ("OCURRIÓ UN ERROR INESPERADO")
+
+@main.command(short_help='Prueba')
+@click.argument('goterm',required=True)
+def show_GoTerm(goterm):
+    
+    try:
+        print (climage.convert(goterm +'.png') )
+    except Exception:
+        print ("An error ocurred while reading the file. Try again")
+        
 
 
 if __name__ == '__main__':
