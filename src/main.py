@@ -1,14 +1,16 @@
 
 from integraciones.uniprot_client import *
 import click
-from integraciones.run_blast import *
+from integraciones.blast_client import *
 import os
 import sys
 from integraciones.go_terms import *
 
+
 ## pathlib
 
 uniprotClient=UniprotClient()
+blastClient = BlastClient()
 
 def saveProteinFasta(filename, protein):
 
@@ -71,19 +73,15 @@ def query_protein(protein):
 
     getProteinFromUniprot(protein)
     
-    
-    
-
-
 
 class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
         click.echo("USAGE: main.py run-blast PROTEIN DATABASE [OPTIONS]")
-        click.echo(show_help())
+        click.echo(blastClient.show_help())
         click.echo("-outfmt ha sido desabilitado")
 
 
-@main.command(short_help="Ejecuta una corrida blast y retorna los resultados de tal corrida.", 
+@main.command(short_help="Run a blast protein query.", 
               cls=HelpfulCmd,
               context_settings=dict(
                 ignore_unknown_options=True,
@@ -95,8 +93,6 @@ def run_blast(protein, database):
 
     args = sys.argv[4:]
 
-    print(args)
-
     if ("-outfmt" in args):
 
         outIndex = args.index("-outfmt")
@@ -105,13 +101,23 @@ def run_blast(protein, database):
         args.pop(outIndex)
         args.pop(outIndex)
 
-    if not "-remote" in args and check_db(database) == 2:
+    if not "-remote" in args and not blastClient.db_exists(database):
         dbfile = input("Database not found, insert database file: ")
-        add_database(dbfile, database)
+        blastClient.add_database(dbfile, database)
 
-    run_query(protein, database, args)
+    blastClient.run_query(protein, database, args)
 
 
+@main.command(short_help='Download Uniprot/Swissprot or Uniprot/Trembl databases.')
+@click.option('--swissprot', is_flag=True, default= False )
+@click.option('--trembl', is_flag=True, default= False )
+def get_database(swissprot, trembl):
+
+    if (swissprot and not blastClient.db_exists('swissprot')):
+        blastClient.download_database('swissprot')
+
+    if (trembl and not blastClient.db_exists('trembl')):
+        pass
 
 def readFile(filename):
     try:
