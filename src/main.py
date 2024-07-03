@@ -33,6 +33,11 @@ def get_GoTerms(protein):
     print (response)
 
 
+@main.command(short_help='Descarga el archivo necesaria para el enriquecimiento GO ')
+def download_go_basic_obo():
+    download_go_term_field() 
+    print ("Archivo go-basic.obo se ha descargado exitosamente.")
+
 @main.command(short_help='Compara Los GoTerms de 2 proteinas y devuelve un resultado.')
 @click.argument('proteinone', required=True)
 @click.argument('proteintwo', required=True)
@@ -48,8 +53,6 @@ def compare_goterms(proteinone, proteintwo):
     print(f"Términos GO para {proteintwo}: {go_terms2}")
     
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
-
-
 
 
 def getProteinFromUniprot(uniprotId):
