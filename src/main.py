@@ -10,6 +10,7 @@ from integraciones.go_terms import *
 ## pathlib
 
 uniprotClient=UniprotClient()
+blastClient = BlastClient()
 
 def saveProteinFasta(filename, protein):
 
@@ -34,6 +35,11 @@ def get_GoTerms(protein):
     print (response)
 
 
+@main.command(short_help='Descarga el archivo necesaria para el enriquecimiento GO ')
+def download_go_basic_obo():
+    download_go_term_field() 
+    print ("Archivo go-basic.obo se ha descargado exitosamente.")
+
 @main.command(short_help='Compara Los GoTerms de 2 proteinas y devuelve un resultado.')
 @click.argument('proteinone', required=True)
 @click.argument('proteintwo', required=True)
@@ -50,27 +56,31 @@ def compare_goterms(proteinone, proteintwo):
     
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
-@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
-@click.argument('protein', required=True)
-def query_protein(protein):
 
-
+def getProteinFromUniprot(uniprotId):
     uniprotClient=UniprotClient()
 
     try:
-        response = uniprotClient.getSequenceFromProtein(protein)
-        saveProteinFasta(protein, response)
+        response = uniprotClient.getSequenceFromProtein(uniprotId)
+        saveProteinFasta(uniprotId, response)
         print (response)
     except InvalidRequestException:
         InvalidRequestException.printMe()
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
+
+@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
+@click.argument('protein', required=True)
+def query_protein(protein):
+
+
+    getProteinFromUniprot(protein)
     
 
 class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
         click.echo("USAGE: main.py run-blast PROTEIN DATABASE [OPTIONS]")
-        click.echo(show_help())
+        click.echo(blastClient.show_help())
         click.echo("-outfmt ha sido desabilitado")
 
 
@@ -94,11 +104,11 @@ def run_blast(protein, database):
         args.pop(outIndex)
         args.pop(outIndex)
 
-    if not "-remote" in args and check_db(database) == 2:
+    if not "-remote" in args and not blastClient.db_exists(database):
         dbfile = input("Database not found, insert database file: ")
-        add_database(dbfile, database)
+        blastClient.add_database(dbfile, database)
 
-    run_query(protein, database, args)
+    blastClient.run_query(protein, database, args)
 
 
 @main.command(short_help='Download Uniprot/Swissprot or Uniprot/Trembl databases.')
@@ -106,11 +116,36 @@ def run_blast(protein, database):
 @click.option('--trembl', is_flag=True, default= False )
 def get_database(swissprot, trembl):
 
-    if (swissprot and check_db('swissprot') == 2):
-        download_database('swissprot')
+    if (swissprot and not blastClient.db_exists('swissprot')):
+        blastClient.download_database('swissprot')
 
-    if (trembl and check_db('trembl') == 2):
+    if (trembl and not blastClient.db_exists('trembl')):
         pass
+
+def readFile(filename):
+    try:
+        file = open(filename, "r") 
+        lines= file.read().splitlines()
+        file.close() 
+        return lines
+    except FileNotFoundError:
+        print ("El archivo indicado no existe")
+
+@main.command(short_help='Lee desde archivo los diferentes codigos uniprot')
+@click.argument('filename', required=True)
+def read_file(filename):
+
+    uniprotCodes =readFile(filename)
+    if uniprotCodes!=None:
+
+        for eachUniprotCode in uniprotCodes:
+            try:
+                getProteinFromUniprot(eachUniprotCode)
+            except InvalidRequestException:
+                InvalidRequestException.printMe()
+            
+    
+
 
 
 if __name__ == '__main__':
