@@ -6,7 +6,7 @@ import os
 import sys
 from integraciones.go_terms import *
 from integraciones.QuickGoClient import *
-import climage
+import cv2
 ## pathlib
 
 uniprotClient=UniprotClient()
@@ -142,10 +142,16 @@ def read_file(filename):
 
 @main.command(short_help='Get Go Term Chart')
 @click.argument('goTerm',required=True)
-def get_chart(goterm):
+@click.option('-d','--just-download', 'download',help='Toggle just download or download & show ', is_flag=True)
+def get_chart(goterm,download):
     try:
         client = QuickGoClient()
-        print (client.getChartById(goterm))
+        click.echo (client.getChartById(goterm))
+        if (not download):
+            img = cv2.imread("downloads/" + goterm.replace(":","_") +'.png', cv2.IMREAD_COLOR)
+            cv2.imshow(goterm, img)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
         
         
     except InvalidRequestQuickGoException:
@@ -153,15 +159,6 @@ def get_chart(goterm):
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
 
-@main.command(short_help='Prueba')
-@click.argument('goterm',required=True)
-def show_GoTerm(goterm):
-    
-    try:
-        print (climage.convert(goterm +'.png') )
-    except Exception:
-        print ("An error ocurred while reading the file. Try again")
-        
 
 
 if __name__ == '__main__':

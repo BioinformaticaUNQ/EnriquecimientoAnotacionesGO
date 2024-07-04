@@ -21,7 +21,7 @@ class QuickGoClient:
         if response.status_code!=200:
                 raise InvalidRequestQuickGoException
         if response.status_code==200:
-            fileName=goTermId.replace(":","") +'.png'
+            fileName="downloads/" + goTermId.replace(":","_") +'.png'
             with open(fileName, 'wb') as out_file:
                 shutil.copyfileobj(response.raw, out_file)
             del response
