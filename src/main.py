@@ -53,15 +53,22 @@ def score_go(namefield):
     if(uniprot_ids_list == None):
         return
 
-    go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
-    if go_terms is None:
-        print("Could not get GO terms for one or both IDs")
+    try:
+        go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
+        if go_terms is None:
+            print("Could not get GO terms for one or both IDs")
+            return
+
+        go_terms_enrichemt = get_go_terms_detail(go_terms)
+        
+        write_score_go(go_terms_enrichemt)
+    except InvalidRequestException as ex:
+        ex.printMe()
         return
-
-    go_terms_enrichemt = get_go_terms_detail(go_terms)
+    except Exception as e:
+        print(f"Error: An error occurred while processing the file {namefield}: {e}")
+        return 
     
-    write_score_go(go_terms_enrichemt)
-
 
 def get_uniprotIds_from_field(name_field):
 
@@ -69,12 +76,19 @@ def get_uniprotIds_from_field(name_field):
     if not os.path.exists(file_path):
         print(f"The file {file_path} does not exist in integraciones/blast/results.\nPlease check that the file exists, it also has to be in txt format.\nIf it does not exist, please run the run_blast command and follow the steps indicated in the help.")
         return None
-    with open(file_path, 'r') as file:
-        contenido = file.read()
+    
+    try:
+        with open(file_path, 'r') as file:
+            contenido = file.read()
 
-    lista_strings = contenido.strip('[]').split(', ')
-    uniprot_ids_list = [entry.strip().strip("'") for entry in lista_strings]
+        lista_strings = contenido.strip('[]').split(', ')
+        uniprot_ids_list = [entry.strip().strip("'") for entry in lista_strings]
+    except Exception as e:
+        print(f"An error occurred while processing the file {file_path}: {e}")
+        return None
+    
     return uniprot_ids_list
+
 
     
 def getProteinFromUniprot(uniprotId):
