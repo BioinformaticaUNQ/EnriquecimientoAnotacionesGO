@@ -142,7 +142,7 @@ def read_file(filename):
                 InvalidRequestException.printMe()
             
     
-@main.command(short_help='Lee desde archivo los diferentes codigos uniprot')
+@main.command(short_help='Show graph of comparison of 2 go terms')
 @click.argument('goTermA', required=True)
 @click.argument('goTermB', required=True)
 def plotGoTerms(goterma,gotermb):
