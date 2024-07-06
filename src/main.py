@@ -54,6 +54,26 @@ def compare_goterms(proteinone, proteintwo):
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
 
+@main.command(short_help='obtains Go terms and their details from a UniprotId code or a list of them.')
+@click.argument('codigouniprotids', required=True)
+def score_go(codigouniprotids):
+
+    uniprot_ids_list = codigouniprotids.split(',')
+
+    if len(uniprot_ids_list) >= 10:
+        print("At most we can search for 10 uniprot codes, please enter 10 codes or less")
+        return
+    
+    go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
+    if go_terms is None:
+        print("Could not get GO terms for one or both IDs")
+        return
+
+    go_terms_enrichemt = get_go_terms_detail(go_terms)
+  
+    print(go_terms_enrichemt)
+
+    
 def getProteinFromUniprot(uniprotId):
     uniprotClient=UniprotClient()
 
