@@ -5,7 +5,7 @@ from integraciones.blast_client import *
 import os
 import sys
 from integraciones.go_terms import *
-
+import cv2
 
 ## pathlib
 
@@ -27,12 +27,12 @@ def get_GoTerms(protein):
     print (response)
 
 
-@main.command(short_help='Descarga el archivo necesaria para el enriquecimiento GO ')
+@main.command(short_help='Download the file needed for GO enrichment')
 def download_go_basic_obo():
     download_go_term_field() 
-    print ("Archivo go-basic.obo se ha descargado exitosamente.")
+    print ("Go-basic.obo file has been downloaded successfully.")
 
-@main.command(short_help='Compara Los GoTerms de 2 proteinas y devuelve un resultado.')
+@main.command(short_help='Compares the GoTerms of 2 proteins and returns a result.')
 @click.argument('proteinone', required=True)
 @click.argument('proteintwo', required=True)
 def compare_goterms(proteinone, proteintwo):
@@ -40,12 +40,9 @@ def compare_goterms(proteinone, proteintwo):
     go_terms2 = uniprotClient.getGoTerms(proteintwo)
 
     if go_terms1 is None or go_terms2 is None:
-        print("No se pudieron obtener los términos GO para uno o ambos ID")
+        print("Could not get GO terms for one or both IDs")
         return
-
-    print(f"Términos GO para {proteinone}: {go_terms1}")
-    print(f"Términos GO para {proteintwo}: {go_terms2}")
-    
+  
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
 
@@ -135,8 +132,40 @@ def read_file(filename):
                 InvalidRequestException.printMe()
             
     
-
-
+@main.command(short_help='Show graph of comparison of 2 go terms')
+@click.argument('goTermA', required=True)
+@click.argument('goTermB', required=True)
+def plotGoTerms(goterma,gotermb):
+    plotGOTComparison(goterma,gotermb)
+    
+    
+    maxScaleUp = 100
+    scaleFactor = 1
+    windowName = "COMPARING " + goterma + " AND " + gotermb
+    trackbarValue = "Scale"
+  
+    # read the image
+    image = cv2.imread("downloads/comparison.png")
+    
+    # Create a window to display results and  set the flag to Autosize
+    cv2.namedWindow(windowName, cv2.WINDOW_AUTOSIZE)
+    
+    # Callback functions
+    def scaleImage(*args):
+        # Get the scale factor from the trackbar 
+        scaleFactor = 1+ args[0]/100.0
+        # Resize the image
+        scaledImage = cv2.resize(image, None, fx=scaleFactor, fy = scaleFactor, interpolation = cv2.INTER_LINEAR)
+        cv2.imshow(windowName, scaledImage)
+    
+    # Create trackbar and associate a callback function
+    cv2.createTrackbar(trackbarValue, windowName, scaleFactor, maxScaleUp, scaleImage)
+    
+    # Display the image
+    cv2.imshow(windowName, image)
+    c = cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
 
 if __name__ == '__main__':
     main()
