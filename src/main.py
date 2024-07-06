@@ -139,8 +139,11 @@ def read_file(filename):
                 InvalidRequestException.printMe()
             
     
-
-
+@main.command(short_help='Lee desde archivo los diferentes codigos uniprot')
+@click.argument('goTermA', required=True)
+@click.argument('goTermB', required=True)
+def plotGoTerms(goterma,gotermb):
+    plotGOTComparison(goterma,gotermb)
 
 if __name__ == '__main__':
     main()

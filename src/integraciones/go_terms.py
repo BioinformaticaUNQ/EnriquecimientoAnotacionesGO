@@ -1,5 +1,6 @@
 import os
 from goatools.base import download_go_basic_obo
+from goatools.cli.gosubdag_plot import PlotCli
 
 #Lee el archivo .obo y retorna una lista de términos.
 def read_field(file_path):
@@ -88,3 +89,7 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
     print(f"Términos GO únicos para {uniprot_id2}: \n")
     show_go_terms(go_terms2_enrichment)
 
+
+def plotGOTComparison(goTermA,goTermB):
+    obj={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'quique.png', 'rankdir': 'TB'}
+    print(PlotCli().cli(obj) )
