@@ -5,7 +5,7 @@ from integraciones.blast_client import *
 import os
 import sys
 from integraciones.go_terms import *
-
+import cv2
 
 ## pathlib
 
@@ -147,6 +147,10 @@ def read_file(filename):
 @click.argument('goTermB', required=True)
 def plotGoTerms(goterma,gotermb):
     plotGOTComparison(goterma,gotermb)
+    img = cv2.imread("downloads/comparison.png", cv2.IMREAD_COLOR)
+    cv2.imshow("COMPARING " + goterma + " AND " + gotermb, img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main()

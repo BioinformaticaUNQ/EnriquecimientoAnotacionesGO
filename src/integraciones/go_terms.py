@@ -98,5 +98,5 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
 
 
 def plotGOTComparison(goTermA,goTermB):
-    obj={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'quique.png', 'rankdir': 'TB'}
-    print(PlotCli().cli(obj) )
+    obj={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
+    PlotCli().cli(obj)
