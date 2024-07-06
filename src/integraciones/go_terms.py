@@ -4,9 +4,6 @@ from goatools.cli.gosubdag_plot import PlotCli
 
 #Lee el archivo .obo y retorna una lista de términos.
 def read_field(file_path):
-
-    #TODO: agregar un if para cheuqear que el archivo exista, si no existe hay que descargarlo o mostrar un help
-
     if not os.path.exists(file_path):
         print(f"The file {file_path} does not exist. We proceed to download it.")
         download_go_term_field()
@@ -31,19 +28,22 @@ def read_field(file_path):
     
     return terminos_dict
 
+def get_name_namespace_by_id(terminos,result,go_id):
+    for termino in terminos:
+        if termino.get('id') == go_id:
+            result.append({
+                'id': go_id,
+                'name': termino.get('name'),
+                'namespace': termino.get('namespace')
+            })
+            break
+
 # Obtiene los valores de name y namespace a partir de una lista de ids de go-terms dado en el archivo .obo.
 def get_name_namespace_from_field(terminos,go_ids):
     resultado = []
     
     for go_id in go_ids:
-        for termino in terminos:
-            if termino.get('id') == go_id:
-                resultado.append({
-                    'id': go_id,
-                    'name': termino.get('name'),
-                    'namespace': termino.get('namespace')
-                })
-                break
+        get_name_namespace_by_id(terminos,resultado,go_id)
     
     return resultado
 
@@ -100,3 +100,28 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
 def plotGOTComparison(goTermA,goTermB):
     obj={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
     PlotCli().cli(obj)
+    
+def get_go_terms_detail(go_terms_uniprots_list):
+    terminos = read_field("downloads/go-basic.obo")
+
+    result = []
+    for res in go_terms_uniprots_list:
+        uniProt_id =  res['UniProtId']
+        go_terms_ids = res['GoTerms']
+        go_term_fields = []
+        for go_term_id in go_terms_ids:
+            get_name_namespace_by_id(terminos,go_term_fields,go_term_id)
+            
+        result.append({
+            'UniProtId':uniProt_id,
+            'GoTerms': go_term_fields
+        })
+    return result
+
+        
+
+
+
+
+
+
