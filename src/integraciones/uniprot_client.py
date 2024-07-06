@@ -1,5 +1,7 @@
 import requests
 import json
+from pathlib import Path
+import os
 
 class InvalidRequestException(Exception):
     "Ocurrió un error en la consulta. Verifique el código Uniprot"
@@ -11,7 +13,17 @@ class InvalidRequestException(Exception):
 class UniprotClient:
     def __init__(self):
         self.headers={"Accept":"application/json"}       
-        self.url="https://rest.uniprot.org/uniprotkb/"   
+        self.url="https://rest.uniprot.org/uniprotkb/"
+        self.path = Path(os.path.abspath(__file__))
+
+    def saveProteinFasta(self, filename, protein):
+
+        newpath = os.path.join( self.path.parent, "blast/proteins" )
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+
+        with open(newpath + "/" + filename + ".fasta", "w") as file:
+            file.write("> " + filename + "\n" + protein)
         
 
     def getProteinDetail(self,uniprotId):
@@ -24,8 +36,8 @@ class UniprotClient:
         
     def getSequenceFromProtein(self, uniprotId):
         #Dada una Uniprot ID retorna una secuencia 
-        
         response=  self.getProteinDetail(uniprotId)
+        self.saveProteinFasta(uniprotId, response['sequence']['value'])
         return response['sequence']['value']
         
     
