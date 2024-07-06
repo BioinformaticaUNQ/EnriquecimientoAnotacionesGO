@@ -6,12 +6,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class InvalidRequestException(Exception):
-    "Ocurrió un error en la consulta. Verifique el código Uniprot"
-    pass
-
-    def printMe():
-        print ("Ocurrió un error en la consulta. Verifique el código Uniprot")
-
+    def __init__(self, message="An error occurred in the query. Please check the Uniprot code"):
+        super().__init__(message)
+        self.message = message
+    
+    def printMe(self):
+        print(f"Error: {self.message}")
+    
+    
 class UniprotClient:
     def __init__(self):
         self.headers={"Accept":"application/json"}       
@@ -106,7 +108,11 @@ class UniprotClient:
     # Devuelvo los terminos GO para una lista de codigos Uniprots
     def getManyGoTerms(self, uniprotIds):
         result = []
-        proteinsDetails = self.getManyProteinDetail(uniprotIds)['results']
+
+        try:
+            proteinsDetails = self.getManyProteinDetail(uniprotIds)['results']
+        except InvalidRequestException as ex:
+            raise
         for protein in proteinsDetails:
             references = protein['uniProtKBCrossReferences']
             resProt = {
