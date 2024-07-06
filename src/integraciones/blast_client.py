@@ -120,6 +120,3 @@ class BlastClient():
 
     # command_path, "-db", "src/integraciones/db/" + database,
     #             "-query", "src/integraciones/proteins/" + protein + ".fasta", "-out", "results.out")
-
-blastClient = BlastClient()
-blastClient.save_ids("/home/luqui/EnriquecimientoAnotacionesGO/src/resul.json")
