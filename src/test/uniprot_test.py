@@ -1,10 +1,14 @@
 import unittest
 import sys;
+from context import uniprot_client
 #sys.path.append(r'C:\\temp\\desa\\EnriquecimientoAnotacionesGO\\src')
-from integraciones.uniprot_client import UniprotClient,InvalidRequestException
+#from integraciones.uniprot_client import UniprotClient,InvalidRequestException
 #sys.path.insert(0 , 'C:\\Users\\name\\desktop\\folder\\mod2')
 # then import module
 #import script2 as lib
+
+UniprotClient = uniprot_client.UniprotClient
+InvalidRequestException = uniprot_client.InvalidRequestException
 
 class TestStringMethods(unittest.TestCase):
 
