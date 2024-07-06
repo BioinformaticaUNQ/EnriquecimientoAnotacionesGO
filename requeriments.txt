@@ -3,3 +3,4 @@ pandas
 biopython
 goatools
 click
+opencv-python

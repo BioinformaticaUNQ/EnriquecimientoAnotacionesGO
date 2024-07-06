@@ -1,5 +1,7 @@
 import requests
 import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 class InvalidRequestException(Exception):
     "Ocurrió un error en la consulta. Verifique el código Uniprot"
@@ -14,6 +16,33 @@ class UniprotClient:
         self.url="https://rest.uniprot.org/uniprotkb/"   
         
 
+
+    # Dividimos una lista segun un n en particular
+    def chunk_list(lst, n):
+        for i in range(0, len(lst), n):
+            yield lst[i:i + n]
+
+    # Dada una lista de codigos uniprots, hacemos la peticion para todos esos codigos.
+    def getManyProteinDetail(self,listUniproId):
+        uniprot_ids_str = ""
+        total = len(listUniproId)
+        count = 0
+        for uniprotId in listUniproId:
+            count+= 1
+            query = None
+            if(count == total):
+                query = f"accession:{uniprotId}"
+            else:
+                query = f"accession:{uniprotId}+OR+"
+            uniprot_ids_str = uniprot_ids_str + query
+
+        url = f"https://rest.uniprot.org/uniprotkb/search?query={uniprot_ids_str}&format=json"
+        response=  requests.get(url,headers=self.headers)
+
+        if response.status_code!=200:
+            raise InvalidRequestException
+        return  json.loads(response.content)
+    
     def getProteinDetail(self,uniprotId):
         #Dada una uniprot ID retorna una proteina en detalle 
         response=  requests.get(self.url+uniprotId,headers=self.headers)
@@ -61,6 +90,21 @@ class UniprotClient:
     def getGoTerms(self,uniprotId):
         references=self.getProteinDetailByKey(uniprotId,'uniProtKBCrossReferences')
         return self.getGoTermsResultMap(references,False)
+    
+    # Devuelvo los terminos GO para una lista de codigos Uniprots
+    def getManyGoTerms(self, uniprotIds):
+        result = []
+        proteinsDetails = self.getManyProteinDetail(uniprotIds)['results']
+        for protein in proteinsDetails:
+            references = protein['uniProtKBCrossReferences']
+            resProt = {
+                "UniProtId": protein['primaryAccession'],
+                "GoTerms": self.getGoTermsResultMap(references,False)
+
+            }
+            result.append(resProt)
+        return result
+
     
 
 
