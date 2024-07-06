@@ -12,14 +12,6 @@ import cv2
 uniprotClient=UniprotClient()
 blastClient = BlastClient()
 
-def saveProteinFasta(filename, protein):
-
-    newpath = "./integraciones/proteins"
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
-
-    with open(newpath + "/" + filename + ".fasta", "w") as file:
-        file.write("> " + filename + "\n" + protein)
 
 @click.group()
 def main():
@@ -79,7 +71,6 @@ def getProteinFromUniprot(uniprotId):
 
     try:
         response = uniprotClient.getSequenceFromProtein(uniprotId)
-        saveProteinFasta(uniprotId, response)
         print (response)
     except InvalidRequestException:
         InvalidRequestException.printMe()
@@ -98,7 +89,7 @@ class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
         click.echo("USAGE: main.py run-blast PROTEIN DATABASE [OPTIONS]")
         click.echo(blastClient.show_help())
-        click.echo("-outfmt ha sido desabilitado")
+        click.echo("-outfmt has been set to a json format")
 
 
 @main.command(short_help="Run a blast protein query.", 
@@ -117,7 +108,6 @@ def run_blast(protein, database):
 
         outIndex = args.index("-outfmt")
         
-
         args.pop(outIndex)
         args.pop(outIndex)
 
@@ -137,7 +127,7 @@ def get_database(swissprot, trembl):
         blastClient.download_database('swissprot')
 
     if (trembl and not blastClient.db_exists('trembl')):
-        pass
+        blastClient.download_database('trembl')
 
 def readFile(filename):
     try:
