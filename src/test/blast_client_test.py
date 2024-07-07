@@ -45,7 +45,7 @@ class TestBlastClient(unittest.TestCase):
 
         DBFiles = glob.glob(os.path.abspath(os.path.join(os.path.dirname(__file__), "../integraciones/blast/database/NewSpecies*")))
 
-        self.assertEqual(len(DBFiles), 9)
+        self.assertEqual(len(DBFiles), 10)
 
     def test_download_swissprot_db(self):
         blastClient = BlastClient()
@@ -54,7 +54,7 @@ class TestBlastClient(unittest.TestCase):
 
         DBFiles = glob.glob(os.path.abspath(os.path.join(os.path.dirname(__file__), "../integraciones/blast/database/swissprot*")))
 
-        self.assertEqual(len(DBFiles), 10)        
+        self.assertEqual(len(DBFiles), 11)        
 
     def test_run_query(self):
         uniprotClient = UniprotClient()
