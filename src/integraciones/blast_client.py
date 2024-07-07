@@ -7,6 +7,12 @@ import json
 from pathlib import Path
 
 
+class FileNotFoundException(Exception):
+    pass
+
+class BlastQueryException(Exception):
+    pass
+
 class BlastClient():
 
     def __init__(self): 
@@ -14,7 +20,6 @@ class BlastClient():
         self.db_path= os.path.join(self.path.parent, "blast/database")
         self.proteins_path= os.path.join(self.path.parent, "blast/proteins")
         self.results_path= os.path.join(self.path.parent, "blast/results")
-        # self.blast_path = os.path.join(self.path.parent, "ncbi-blast-2.15.0+/bin")
     
 
     def print_output(self, subprocess):
@@ -26,15 +31,6 @@ class BlastClient():
 
 
     def db_exists(self, database):
-        # command_path = os.path.join(self.blast_path , "blastdbcmd")
-        # db_path = os.path.join(self.path.parent, "db", database)
-
-        # args = (command_path, "-db", db_path, "-info")
-        # popen = subprocess.Popen(args, stdout=subprocess.DEVNULL )
-        # popen.wait()
-        # popen.kill()
-        # # output = popen.stdout.read()
-        # return not popen.returncode == 2
 
         command = f'docker run --rm \
                 -v {self.db_path}:/blast/blastdb_custom:rw \
@@ -42,31 +38,23 @@ class BlastClient():
                 ncbi/blast \
                 blastdbcmd -db /blast/blastdb_custom/{database} -info'
 
-        try:
 
+        
+        try:
             proc = subprocess.run(command, shell=True, check=True, capture_output=True)
         
         except subprocess.CalledProcessError:
 
             return False
-        
-        return True
+        else:
+            return True
 
 
 
     def add_database(self, filename, database, blast_args):
 
-        # command_path = os.path.join(self.blast_path, "makeblastdb")
-        # db_path = os.path.join(self.path.parent, "db", database)
-
-        # args = (command_path, "-in", filename, "-parse_seqids",
-        #         "-dbtype", "prot", "-out", db_path)
-        
-        # popen = subprocess.Popen(args, stdout=subprocess.PIPE)
-        # popen.wait()
-        # self.print_output(popen)
-        # popen.kill()
-
+        if not os.path.isfile(os.path.join(self.db_path, filename)):
+            raise FileNotFoundException("Database file not found")
         
 
         command = f'docker run --rm \
@@ -79,51 +67,30 @@ class BlastClient():
         for arg in blast_args: 
             command += " " + arg
 
+        command2 = f'docker run --rm \
+                -v {self.db_path}:/blast/blastdb_custom:rw \
+                -w /blast/blastdb_custom \
+                ncbi/blast \
+                blastdbcmd -db /blast/blastdb_custom/{database} -entry all -out {database}.info -outfmt %a'
+
         subprocess.run(command, shell=True, check=True)
+        subprocess.run(command2, shell=True, check=True)
 
 
 
     def run_query(self, protein, database, blast_args):
-        # command_path = os.path.join(self.blast_path, "blastp")
         
-        # if ("-remote" in blast_args):
-        #     db_path = database
-        # else:
-        #     db_path = os.path.join(self.path.parent, "db", database)
-
-        # protein_path = os.path.join(self.path.parent, "proteins", protein + ".fasta")
-
-        # args = (command_path, "-db", db_path,
-        #         "-query", protein_path, "-outfmt", "15")
-
-        # if not os.path.isdir( self.results_path):
-        #     os.mkdir(self.results_path)
-
- 
-        # if "-out" in blast_args:
-        #     index = blast_args.index("-out")
-        #     blast_args[index + 1] =  os.path.join (self.results_path, blast_args[index + 1] )
-
-        # for arg in blast_args:
-        #     args = args + (arg,)
-
-        # print(args)
-
-        # popen = subprocess.Popen(args, stdout=subprocess.PIPE )
-        # popen.wait()
-        # self.print_output(popen)
-        # popen.kill()
+        if not os.path.isfile(os.path.join(self.proteins_path, protein + ".fasta")):
+            raise FileNotFoundException("Protein not found in files. Run query-protein")
 
         if not os.path.isdir( self.results_path): 
             os.mkdir(self.results_path)
 
-        # if ("-remote" in blast_args):
-        #     db = database
-        # else:
-        #     db = f"blast/blastdb_custom/{database}"
+        result = ""
 
         if "-out" in blast_args:
             index = blast_args.index("-out")
+            result = os.path.join (self.results_path, blast_args[index+1])
             blast_args[index + 1] =  os.path.join ('/blast/results', blast_args[index + 1] )
 
         command = f'docker run --rm \
@@ -137,19 +104,16 @@ class BlastClient():
         for arg in blast_args:
             command += f" {arg}"
 
-        subprocess.run(command, shell=True, check=True)
+        try:
+            subprocess.run(command, shell=True, check=True)
+        except Exception:
+            raise BlastQueryException("BLAST blastp error in query run")
+        else:
+            self.produce_log(result, database)
                  
 
 
     def show_help(self ):
-        # command_path = os.path.join(self.blast_path, "blastp")
-
-        # args = (command_path, "-help")
-        # popen = subprocess.Popen(args, stdout=subprocess.PIPE, cwd="./")
-        # popen.wait()
-        # self.print_output(popen)
-        # popen.kill()
-
         command = f'docker run --rm ncbi/blast blastp -help'
 
         subprocess.run(command, shell=True, check=True)
@@ -183,12 +147,56 @@ class BlastClient():
         file.close()
         matchs = prots['BlastOutput2'][0]["report"]["results"]["search"]["hits"]
 
-        # for match in matchs:
-        #      print(match["description"][0]["accession"])#["description"]["accession"])
-
         ids = [match["description"][0]["accession"] for match in matchs]
         print(ids)
         return (ids)
 
 
-blastClient = BlastClient()
+    def produce_log(self, results, database):
+        
+        with open(results) as file:
+            blast = json.load(file)
+        
+        report = blast['BlastOutput2'][0]['report']
+
+        file = open(os.path.join(self.path.parent, "blast", "blast.log"), "a+")
+        
+        file.write("====================================================================\n")
+        file.write("Query: " + report["results"]["search"]["query_title"]+ "\n")
+        file.write("Database: " + report['search_target']['db']+ "\n")
+        file.write("Matrix: " + report["params"]["matrix"] + "\n")
+        file.write("E-Value: " + str(report["params"]["expect"]) + "\n")
+        file.write("Cost to open a gap: " + str(report["params"]["gap_open"]) + "\n")
+        file.write("Cost to extend a gap: " + str(report["params"]["gap_extend"]) + "\n")
+        file.write("Query length: " + str(report["results"]["search"]["query_len"])+ "\n")
+        file.write("Matches: ")
+        
+        matchs = blast['BlastOutput2'][0]["report"]["results"]["search"]["hits"]
+
+        ids = []
+
+        for match in matchs:
+            file.write("    Id: " + match["description"][0]['id'] + "\n")
+            file.write("    Title: " + match["description"][0]['title'] + "\n")
+            file.write("    Score: " + str(match["hsps"][0]['score']) + "\n")
+            file.write("    Evalue: " + str(match["hsps"][0]['evalue'])+ "\n")
+            file.write("    Identity: " + str(match["hsps"][0]['identity'])+ "\n")
+            file.write("    Alignment:\n")
+            file.write("        " + match["hsps"][0]['qseq'] + "\n")
+            file.write("        " + match["hsps"][0]['midline'] + "\n")
+            file.write("        " + match["hsps"][0]['hseq'] + "\n \n")
+
+
+            ids.append(match["description"][0]['accession'])
+
+        db_ids = open( os.path.join (self.db_path, database + ".info"), "r")
+        
+        count = 0
+        for line in db_ids:
+            line = line.strip()
+            if not line in ids:
+                count += 1
+
+        file.write("Missed sequences: " + str(count) + "\n")
+
+
