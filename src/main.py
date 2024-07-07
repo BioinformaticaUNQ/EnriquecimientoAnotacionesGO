@@ -152,15 +152,24 @@ def run_blast(protein, database):
     if ("-outfmt" in args):
 
         outIndex = args.index("-outfmt")
-        
         args.pop(outIndex)
         args.pop(outIndex)
 
     if not "-remote" in args and not blastClient.db_exists(database):
-        dbfile = input("Database not found, insert database file: ")
-        blastClient.add_database(dbfile, database)
+        dbfile = input("Database not found, insert database file:")
+        db_args = list(dbfile.split(" "))
 
-    blastClient.run_query(protein, database, args)
+        try:
+            blastClient.add_database(db_args[0], database, db_args[1:])
+        except Exception as e:
+            print(e)
+            return
+
+    try:
+        blastClient.run_query(protein, database, args)
+    except Exception as e:
+        print(e)
+    
 
 
 @main.command(short_help='Download Uniprot/Swissprot or Uniprot/Trembl databases.')
