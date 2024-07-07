@@ -10,6 +10,7 @@ class InvalidRequestException(Exception):
         super().__init__(message)
         self.message = message
     
+
     def printMe(self):
         print(f"Error: {self.message}")
     
@@ -61,7 +62,7 @@ class UniprotClient:
         #Dada una uniprot ID retorna una proteina en detalle 
         response=  requests.get(self.url+uniprotId,headers=self.headers)
         if response.status_code!=200:
-                raise InvalidRequestException
+                raise InvalidRequestException()
         return json.loads(response.content)
     
         

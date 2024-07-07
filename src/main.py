@@ -63,8 +63,8 @@ def score_go(namefield):
         go_terms_enrichemt = get_go_terms_detail(go_terms)
         
         write_score_go(go_terms_enrichemt)
-    except InvalidRequestException as ex:
-        ex.printMe()
+    except InvalidRequestException as e:
+        e.printMe()
         return
     except Exception as e:
         print(f"Error: An error occurred while processing the file {namefield}: {e}")
@@ -98,8 +98,8 @@ def getProteinFromUniprot(uniprotId):
     try:
         response = uniprotClient.getSequenceFromProtein(uniprotId)
         print (response)
-    except InvalidRequestException:
-        InvalidRequestException.printMe()
+    except InvalidRequestException as e:
+        e.printMe()
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
 
@@ -174,8 +174,8 @@ def read_file(filename):
         for eachUniprotCode in uniprotCodes:
             try:
                 getProteinFromUniprot(eachUniprotCode)
-            except InvalidRequestException:
-                InvalidRequestException.printMe()
+            except InvalidRequestException as e:
+                e.printMe()
             
     
 @main.command(short_help='Show graph of comparison of 2 go terms')
