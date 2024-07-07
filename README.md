@@ -1,69 +1,88 @@
-# Trabajo práctico final: Enriquecimiento de anotaciones GO
-CLI que permite comparar y enriquecer de proteínas homólogas
+# Final practical work: GO annotation enrichment
+CLI that allows comparison and enrichment of homologous proteins
 
-## Integrantes:
+## Members:
 
 * Enrique Alonso.
 * Lucas Alvarez.
 * Gaston Da Silva.
 
-## Instalación
+## Facility
 
-### Prerrequisitos
+### Prerequisites
 
-Asegúrate de tener Python 3 instalado en tu sistema. Puedes verificar la versión de Python instalada con el siguiente comando:
+Make sure you have Python 3 installed on your system. You can check the installed Python version with the following command:
 
 ```sh
 python3 --version
 ```
+### Steps to follow
 
-### Pasos a seguir
-
-1. Clona el repositorio (o descarga el código fuente):
-
+1. Clone the repository (or download the source code):
 ```bash
 git clone https://github.com/BioinformaticaUNQ/EnriquecimientoAnotacionesGO.git
 cd EnriquecimientoAnotacionesGO
 ```
 
-2. Crea un entorno virtual:
-
+2. Create a virtual environment:
+   
 ```bash
 python3 -m venv venv  
 ```
 
-3. Activa el entorno virtual:
+3. Activate the virtual environment:
 ```bash
 source venv/bin/activate
 ```
 
-4. Instala dentro del entorno virtual las dependencias configuradas en el archivo requeriments.txt
+4. Installs the dependencies configured in the requirements.txt file within the virtual environment.
 
 ```bash
 pip install -r requeriments.txt
 ```
 
 
-## Uso
+# Use
 
-Podes ejecutar con los siguientes comandos:
+You can execute it with the following commands:
 
-Retorna una secuencia de aminoacidos para la proteina solicitada.
+Returns an amino acid sequence for the requested protein.
 ```bash
 query-protein [codigoUniprot]
 ```
 
-Ejecuta una corrida blast y retorna los resultados de tal corrida.
+Executes a blast run and returns the results of that run.
 ```bash
-run-blast [proteina] [baseDeDatos] 
+run-blast [protein] [dataBase] 
 ```
 
-Retorna los terminos go para una proteina.
+Returns the go terms for a protein.
 ```bash
-get-goterms[codigoUniprot]
+get-goterms[uniprotCode]
 ```
 
-Obtiene y compara los GoTerms dados por parametro.
+
+## compare-goterms
+Gets and compares the GoTerms given by parameter.
 ```bash
-compare-goterms [codigoUniprot1] [codigoUniprot2]
+compare-goterms [uniprotCode1] [uniprotCode2]
+```
+
+### Ejemplo:
+To compare the GO terms of UniProt codes P12345 and Q67890:
+```bash
+compare-goterms P12345 Q67890
+```
+
+## score-go
+Generate a csv file with all the details of the Go-terms for each uniprot code.
+The command requests to be sent the name of the file where the uniprots code information is located.
+```bash
+score-go [field_name]
+```
+
+### Ejemplo:
+If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
+```bash
+score-go uniprot_codes.json
 ```
