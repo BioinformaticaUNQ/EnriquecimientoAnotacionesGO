@@ -5,7 +5,8 @@ from integraciones.blast_client import *
 import os
 import sys
 from integraciones.go_terms import *
-#import cv2
+import cv2
+from screeninfo import get_monitors
 
 ## pathlib
 
@@ -17,7 +18,7 @@ blastClient = BlastClient()
 def main():
     pass
 
-@main.command(short_help='Retorna los terminos go para una proteina.')
+@main.command(short_help='Returns all protein\'s GO Terms')
 @click.argument('protein', required=True)
 def get_GoTerms(protein):
     uniprotClient=UniprotClient()
@@ -27,12 +28,12 @@ def get_GoTerms(protein):
     print (response)
 
 
-@main.command(short_help='Download the file needed for GO enrichment')
+@main.command(short_help='Download the file needed for GO enrichment.')
 def download_go_basic_obo():
     download_go_term_field() 
     print ("Go-basic.obo file has been downloaded successfully.")
 
-@main.command(short_help='Compares the GoTerms of 2 proteins and returns a result.')
+@main.command(short_help='Compares the Go Terms of 2 proteins and returns a result.')
 @click.argument('proteinone', required=True)
 @click.argument('proteintwo', required=True)
 def compare_goterms(proteinone, proteintwo):
@@ -40,30 +41,55 @@ def compare_goterms(proteinone, proteintwo):
     go_terms2 = uniprotClient.getGoTerms(proteintwo)
 
     if go_terms1 is None or go_terms2 is None:
-        print("Could not get GO terms for one or both IDs")
+        print("Could not get GO Terms for one or both IDs")
         return
   
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
 
-@main.command(short_help='obtains Go terms and their details from a UniprotId code or a list of them.')
-@click.argument('codigouniprotids', required=True)
-def score_go(codigouniprotids):
-
-    uniprot_ids_list = codigouniprotids.split(',')
-
-    if len(uniprot_ids_list) >= 10:
-        print("At most we can search for 10 uniprot codes, please enter 10 codes or less")
+@main.command(short_help='Obtains Go Terms and their details from a Uniprot ID code or a list of them.')
+@click.argument('namefield', required=True)
+def score_go(namefield):
+    uniprot_ids_list = get_uniprotIds_from_field(namefield)    
+    if(uniprot_ids_list == None):
         return
+
+    try:
+        go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
+        if go_terms is None:
+            print("Could not get GO Terms for one or both IDs")
+            return
+
+        go_terms_enrichemt = get_go_terms_detail(go_terms)
+        
+        write_score_go(go_terms_enrichemt)
+    except InvalidRequestException as e:
+        e.printMe()
+        return
+    except Exception as e:
+        print(f"Error: An error occurred while processing the file {namefield}: {e}")
+        return 
     
-    go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
-    if go_terms is None:
-        print("Could not get GO terms for one or both IDs")
-        return
 
-    go_terms_enrichemt = get_go_terms_detail(go_terms)
-  
-    print(go_terms_enrichemt)
+def get_uniprotIds_from_field(name_field):
+
+    file_path  = f"integraciones/blast/results/{name_field}.txt"
+    if not os.path.exists(file_path):
+        print(f"The file {file_path} does not exist in integraciones/blast/results.\nPlease check that the file exists, it also has to be in txt format.\nIf it does not exist, please run the run_blast command and follow the steps indicated in the help.")
+        return None
+    
+    try:
+        with open(file_path, 'r') as file:
+            contenido = file.read()
+
+        lista_strings = contenido.strip('[]').split(', ')
+        uniprot_ids_list = [entry.strip().strip("'") for entry in lista_strings]
+    except Exception as e:
+        print(f"An error occurred while processing the file {file_path}: {e}")
+        return None
+    
+    return uniprot_ids_list
+
 
     
 def getProteinFromUniprot(uniprotId):
@@ -72,12 +98,12 @@ def getProteinFromUniprot(uniprotId):
     try:
         response = uniprotClient.getSequenceFromProtein(uniprotId)
         print (response)
-    except InvalidRequestException:
-        InvalidRequestException.printMe()
+    except InvalidRequestException as e:
+        e.printMe()
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
 
-@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
+@main.command(short_help='Returns an aminoacid sequence for a given protein.')
 @click.argument('protein', required=True)
 def query_protein(protein):
 
@@ -147,7 +173,7 @@ def readFile(filename):
     except FileNotFoundError:
         print ("El archivo indicado no existe")
 
-@main.command(short_help='Lee desde archivo los diferentes codigos uniprot')
+@main.command(short_help='Reads all Uniprot ID from a given file.')
 @click.argument('filename', required=True)
 def read_file(filename):
 
@@ -157,43 +183,20 @@ def read_file(filename):
         for eachUniprotCode in uniprotCodes:
             try:
                 getProteinFromUniprot(eachUniprotCode)
-            except InvalidRequestException:
-                InvalidRequestException.printMe()
+            except InvalidRequestException as e:
+                e.printMe()
             
     
-@main.command(short_help='Show graph of comparison of 2 go terms')
+@main.command(short_help='Shows a hierarchy graph comparing of 2 GO Terms')
 @click.argument('goTermA', required=True)
 @click.argument('goTermB', required=True)
-def plotGoTerms(goterma,gotermb):
-    plotGOTComparison(goterma,gotermb)
-    
-    
-    maxScaleUp = 100
-    scaleFactor = 1
-    windowName = "COMPARING " + goterma + " AND " + gotermb
-    trackbarValue = "Scale"
-  
-    # read the image
-    image = cv2.imread("downloads/comparison.png")
-    
-    # Create a window to display results and  set the flag to Autosize
-    cv2.namedWindow(windowName, cv2.WINDOW_AUTOSIZE)
-    
-    # Callback functions
-    def scaleImage(*args):
-        # Get the scale factor from the trackbar 
-        scaleFactor = 1+ args[0]/100.0
-        # Resize the image
-        scaledImage = cv2.resize(image, None, fx=scaleFactor, fy = scaleFactor, interpolation = cv2.INTER_LINEAR)
-        cv2.imshow(windowName, scaledImage)
-    
-    # Create trackbar and associate a callback function
-    cv2.createTrackbar(trackbarValue, windowName, scaleFactor, maxScaleUp, scaleImage)
-    
-    # Display the image
-    cv2.imshow(windowName, image)
-    c = cv2.waitKey(0)
-    cv2.destroyAllWindows()
+@click.option('--children', is_flag=True, default= False )
+@click.option('--relationships', is_flag=True, default= False )
+def plotGoTerms(goterma,gotermb,children,relationships):
+    plotGOTComparison(goterma,gotermb,children,relationships)
+    from PIL import Image
+    im = Image.open("downloads/comparison.png")
+    im.show()
     
 
 if __name__ == '__main__':

@@ -1,0 +1,249 @@
+UniProtId,GO_ID,GO_Name,Namespace
+P99999,GO:0043293,apoptosome,cellular_component
+P99999,GO:0005829,cytosol,cellular_component
+P99999,GO:0005743,mitochondrial inner membrane,cellular_component
+P99999,GO:0005758,mitochondrial intermembrane space,cellular_component
+P99999,GO:0005739,mitochondrion,cellular_component
+P99999,GO:0005634,nucleus,cellular_component
+P99999,GO:0070469,respirasome,cellular_component
+P99999,GO:0009055,electron transfer activity,molecular_function
+P99999,GO:0020037,heme binding,molecular_function
+P99999,GO:0046872,metal ion binding,molecular_function
+P99999,GO:0008635,activation of cysteine-type endopeptidase activity involved in apoptotic process by cytochrome c,biological_process
+P99999,GO:0045333,cellular respiration,biological_process
+P99999,GO:0097193,intrinsic apoptotic signaling pathway,biological_process
+P99999,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P99999,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P62897,GO:0043293,apoptosome,cellular_component
+P62897,GO:0005829,cytosol,cellular_component
+P62897,GO:0005758,mitochondrial intermembrane space,cellular_component
+P62897,GO:0005739,mitochondrion,cellular_component
+P62897,GO:0043209,myelin sheath,cellular_component
+P62897,GO:0070469,respirasome,cellular_component
+P62897,GO:0009055,electron transfer activity,molecular_function
+P62897,GO:0019899,enzyme binding,molecular_function
+P62897,GO:0020037,heme binding,molecular_function
+P62897,GO:0046872,metal ion binding,molecular_function
+P62897,GO:0006915,apoptotic process,biological_process
+P62897,GO:0042743,hydrogen peroxide metabolic process,biological_process
+P62897,GO:0097193,intrinsic apoptotic signaling pathway,biological_process
+P62897,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P62897,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00015,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00015,GO:0005739,mitochondrion,cellular_component
+P00015,GO:0070469,respirasome,cellular_component
+P00015,GO:0009055,electron transfer activity,molecular_function
+P00015,GO:0020037,heme binding,molecular_function
+P00015,GO:0046872,metal ion binding,molecular_function
+P00015,GO:0006915,apoptotic process,biological_process
+P00015,GO:0042743,hydrogen peroxide metabolic process,biological_process
+P00015,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00015,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00015,GO:2001244,positive regulation of intrinsic apoptotic signaling pathway,biological_process
+P19974,GO:0005758,mitochondrial intermembrane space,cellular_component
+P19974,GO:0070469,respirasome,cellular_component
+P19974,GO:0009055,electron transfer activity,molecular_function
+P19974,GO:0020037,heme binding,molecular_function
+P19974,GO:0046872,metal ion binding,molecular_function
+P19974,GO:0022900,electron transport chain,biological_process
+P19974,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P19974,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00044,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00044,GO:0005739,mitochondrion,cellular_component
+P00044,GO:0070469,respirasome,cellular_component
+P00044,GO:0009055,electron transfer activity,molecular_function
+P00044,GO:0020037,heme binding,molecular_function
+P00044,GO:0046872,metal ion binding,molecular_function
+P00044,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00044,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P62894,GO:0005758,mitochondrial intermembrane space,cellular_component
+P62894,GO:0070469,respirasome,cellular_component
+P62894,GO:0009055,electron transfer activity,molecular_function
+P62894,GO:0020037,heme binding,molecular_function
+P62894,GO:0046872,metal ion binding,molecular_function
+P62894,GO:0006915,apoptotic process,biological_process
+P62894,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P62894,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00045,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00045,GO:0005739,mitochondrion,cellular_component
+P00045,GO:0070469,respirasome,cellular_component
+P00045,GO:0009055,electron transfer activity,molecular_function
+P00045,GO:0020037,heme binding,molecular_function
+P00045,GO:0046872,metal ion binding,molecular_function
+P00045,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00045,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P04657,GO:0005829,cytosol,cellular_component
+P04657,GO:0005758,mitochondrial intermembrane space,cellular_component
+P04657,GO:0005739,mitochondrion,cellular_component
+P04657,GO:0070469,respirasome,cellular_component
+P04657,GO:0008656,cysteine-type endopeptidase activator activity involved in apoptotic process,molecular_function
+P04657,GO:0009055,electron transfer activity,molecular_function
+P04657,GO:0020037,heme binding,molecular_function
+P04657,GO:0046872,metal ion binding,molecular_function
+P04657,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P04657,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P04657,GO:0006119,oxidative phosphorylation,biological_process
+P04657,GO:0046669,regulation of compound eye retinal cell programmed cell death,biological_process
+P04657,GO:0007291,sperm individualization,biological_process
+P62898,GO:0043293,apoptosome,cellular_component
+P62898,GO:0005829,cytosol,cellular_component
+P62898,GO:0005758,mitochondrial intermembrane space,cellular_component
+P62898,GO:0005739,mitochondrion,cellular_component
+P62898,GO:0070469,respirasome,cellular_component
+P62898,GO:0009055,electron transfer activity,molecular_function
+P62898,GO:0019899,enzyme binding,molecular_function
+P62898,GO:0020037,heme binding,molecular_function
+P62898,GO:0046872,metal ion binding,molecular_function
+P62898,GO:0006915,apoptotic process,biological_process
+P62898,GO:0034349,glial cell apoptotic process,biological_process
+P62898,GO:0042743,hydrogen peroxide metabolic process,biological_process
+P62898,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P62898,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P62898,GO:0010730,negative regulation of hydrogen peroxide biosynthetic process,biological_process
+P62898,GO:1901857,positive regulation of cellular respiration,biological_process
+P62898,GO:0034465,response to carbon monoxide,biological_process
+P62898,GO:0046688,response to copper ion,biological_process
+P62898,GO:0009629,response to gravity,biological_process
+P62898,GO:0002931,response to ischemia,biological_process
+P62898,GO:0006979,response to oxidative stress,biological_process
+P00011,GO:0005829,cytosol,cellular_component
+P00011,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00011,GO:0070469,respirasome,cellular_component
+P00011,GO:0009055,electron transfer activity,molecular_function
+P00011,GO:0020037,heme binding,molecular_function
+P00011,GO:0046872,metal ion binding,molecular_function
+P00011,GO:0006915,apoptotic process,biological_process
+P00011,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00011,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P67881,GO:0005737,cytoplasm,cellular_component
+P67881,GO:0005758,mitochondrial intermembrane space,cellular_component
+P67881,GO:0005739,mitochondrion,cellular_component
+P67881,GO:0070469,respirasome,cellular_component
+P67881,GO:0009055,electron transfer activity,molecular_function
+P67881,GO:0020037,heme binding,molecular_function
+P67881,GO:0046872,metal ion binding,molecular_function
+P67881,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P67881,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P68099,GO:0005758,mitochondrial intermembrane space,cellular_component
+P68099,GO:0070469,respirasome,cellular_component
+P68099,GO:0009055,electron transfer activity,molecular_function
+P68099,GO:0020037,heme binding,molecular_function
+P68099,GO:0046872,metal ion binding,molecular_function
+P68099,GO:0006915,apoptotic process,biological_process
+P68099,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P68099,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P68100,GO:0005758,mitochondrial intermembrane space,cellular_component
+P68100,GO:0070469,respirasome,cellular_component
+P68100,GO:0009055,electron transfer activity,molecular_function
+P68100,GO:0020037,heme binding,molecular_function
+P68100,GO:0046872,metal ion binding,molecular_function
+P68100,GO:0006915,apoptotic process,biological_process
+P68100,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P68100,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00004,GO:0070069,cytochrome complex,cellular_component
+P00004,GO:0005829,cytosol,cellular_component
+P00004,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00004,GO:0070469,respirasome,cellular_component
+P00004,GO:0009055,electron transfer activity,molecular_function
+P00004,GO:0020037,heme binding,molecular_function
+P00004,GO:0042802,identical protein binding,molecular_function
+P00004,GO:0008289,lipid binding,molecular_function
+P00004,GO:0046872,metal ion binding,molecular_function
+P00004,GO:0006915,apoptotic process,biological_process
+P00004,GO:0018063,cytochrome c-heme linkage,biological_process
+P00004,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00004,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00004,GO:0043065,positive regulation of apoptotic process,biological_process
+P00004,GO:2001056,positive regulation of cysteine-type endopeptidase activity,biological_process
+P00004,GO:0043280,positive regulation of cysteine-type endopeptidase activity involved in apoptotic process,biological_process
+P68098,GO:0005758,mitochondrial intermembrane space,cellular_component
+P68098,GO:0070469,respirasome,cellular_component
+P68098,GO:0009055,electron transfer activity,molecular_function
+P68098,GO:0020037,heme binding,molecular_function
+P68098,GO:0046872,metal ion binding,molecular_function
+P68098,GO:0006915,apoptotic process,biological_process
+P68098,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P68098,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00002,GO:0005829,cytosol,cellular_component
+P00002,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00002,GO:0070469,respirasome,cellular_component
+P00002,GO:0009055,electron transfer activity,molecular_function
+P00002,GO:0020037,heme binding,molecular_function
+P00002,GO:0046872,metal ion binding,molecular_function
+P00002,GO:0006915,apoptotic process,biological_process
+P00002,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00002,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00007,GO:0005829,cytosol,cellular_component
+P00007,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00007,GO:0070469,respirasome,cellular_component
+P00007,GO:0009055,electron transfer activity,molecular_function
+P00007,GO:0020037,heme binding,molecular_function
+P00007,GO:0046872,metal ion binding,molecular_function
+P00007,GO:0006915,apoptotic process,biological_process
+P00007,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00007,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00008,GO:0005829,cytosol,cellular_component
+P00008,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00008,GO:0070469,respirasome,cellular_component
+P00008,GO:0009055,electron transfer activity,molecular_function
+P00008,GO:0020037,heme binding,molecular_function
+P00008,GO:0046872,metal ion binding,molecular_function
+P00008,GO:0006915,apoptotic process,biological_process
+P00008,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00008,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+P00012,GO:0005829,cytosol,cellular_component
+P00012,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00012,GO:0070469,respirasome,cellular_component
+P00012,GO:0009055,electron transfer activity,molecular_function
+P00012,GO:0020037,heme binding,molecular_function
+P00012,GO:0046872,metal ion binding,molecular_function
+P00012,GO:0006915,apoptotic process,biological_process
+P00012,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00012,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+Q55013,GO:0031676,plasma membrane-derived thylakoid membrane,cellular_component
+Q55013,GO:0030096,plasma membrane-derived thylakoid photosystem II,cellular_component
+Q55013,GO:0009055,electron transfer activity,molecular_function
+Q55013,GO:0020037,heme binding,molecular_function
+Q55013,GO:0005506,iron ion binding,molecular_function
+Q55013,GO:0019684,"photosynthesis, light reaction",biological_process
+Q55013,GO:0022904,respiratory electron transport chain,biological_process
+Q8NNK5,GO:0005886,plasma membrane,cellular_component
+Q8NNK5,GO:0070469,respirasome,cellular_component
+Q8NNK5,GO:0020037,heme binding,molecular_function
+Q8NNK5,GO:0005506,iron ion binding,molecular_function
+Q8NNK5,GO:0008121,ubiquinol-cytochrome-c reductase activity,molecular_function
+P00014,GO:0005829,cytosol,cellular_component
+P00014,GO:0005758,mitochondrial intermembrane space,cellular_component
+P00014,GO:0070469,respirasome,cellular_component
+P00014,GO:0009055,electron transfer activity,molecular_function
+P00014,GO:0020037,heme binding,molecular_function
+P00014,GO:0046872,metal ion binding,molecular_function
+P00014,GO:0006915,apoptotic process,biological_process
+P00014,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+P00014,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process
+Q03075,GO:0005886,plasma membrane,cellular_component
+Q03075,GO:0070469,respirasome,cellular_component
+Q03075,GO:0009055,electron transfer activity,molecular_function
+Q03075,GO:0020037,heme binding,molecular_function
+Q03075,GO:0005506,iron ion binding,molecular_function
+Q03075,GO:0016491,oxidoreductase activity,molecular_function
+Q03075,GO:0006119,oxidative phosphorylation,biological_process
+Q03075,GO:1902600,proton transmembrane transport,biological_process
+Q03438,GO:0005886,plasma membrane,cellular_component
+Q03438,GO:0070469,respirasome,cellular_component
+Q03438,GO:0005507,copper ion binding,molecular_function
+Q03438,GO:0004129,cytochrome-c oxidase activity,molecular_function
+Q03438,GO:0020037,heme binding,molecular_function
+Q03438,GO:0042773,ATP synthesis coupled electron transport,biological_process
+O23138,GO:0005829,cytosol,cellular_component
+O23138,GO:0005758,mitochondrial intermembrane space,cellular_component
+O23138,GO:0005739,mitochondrion,cellular_component
+O23138,GO:0005634,nucleus,cellular_component
+O23138,GO:0000325,plant-type vacuole,cellular_component
+O23138,GO:0070469,respirasome,cellular_component
+O23138,GO:0005507,copper ion binding,molecular_function
+O23138,GO:0009055,electron transfer activity,molecular_function
+O23138,GO:0020037,heme binding,molecular_function
+O23138,GO:0010336,gibberellic acid homeostasis,biological_process
+O23138,GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",biological_process
+O23138,GO:0006122,"mitochondrial electron transport, ubiquinol to cytochrome c",biological_process

@@ -1,4 +1,5 @@
 import os
+import csv
 from goatools.base import download_go_basic_obo
 from goatools.cli.gosubdag_plot import PlotCli
 
@@ -97,9 +98,22 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
     show_go_terms(go_terms2_enrichment)
 
 
-def plotGOTComparison(goTermA,goTermB):
-    obj={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
-    PlotCli().cli(obj)
+def plotGOTComparison(goTermA,goTermB,drawChildren=False,relationships=False):
+    options={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
+    if drawChildren:
+        options['draw-children']=True
+    if relationships:
+        #Ver si hay forma de filtrar tipos de relaciones
+        options['relationships']='part_of,regulates'
+        
+    
+    #options['parentcnt']=0
+    #options['title']="quique"
+    #print (options)
+    
+    
+    
+    PlotCli().cli(options)
     
 def get_go_terms_detail(go_terms_uniprots_list):
     terminos = read_field("downloads/go-basic.obo")
@@ -116,9 +130,41 @@ def get_go_terms_detail(go_terms_uniprots_list):
             'UniProtId':uniProt_id,
             'GoTerms': go_term_fields
         })
-    return result
+    return result        
 
+# Funcion para poder exportar las anotaciones Go calculadas como un csv
+def write_score_go(anotaciones, archivo_base='score_go.csv'):
+
+    # Generamos un nombre de archivo único si el archivo ya existe
+    archivo = os.path.join('score-go-results', archivo_base)
+    contador = 1
+    nombre_base, extension = os.path.splitext(archivo)
+    
+    while os.path.exists(archivo):
+        archivo = f"{nombre_base}_{contador}{extension}"
+        contador += 1
+
+    campos = ['UniProtId', 'GO_ID', 'GO_Name', 'Namespace']
+    
+    with open(archivo, mode='w', newline='') as csv_file:
+        escritor_csv = csv.DictWriter(csv_file, fieldnames=campos)
+                
+        escritor_csv.writeheader()
         
+        # Iteramos sobre las anotaciones
+        for item in anotaciones:
+            uni_prot_id = item['UniProtId']
+            for go_term in item['GoTerms']:
+                fila = {
+                    'UniProtId': uni_prot_id,
+                    'GO_ID': go_term['id'],
+                    'GO_Name': go_term['name'],
+                    'Namespace': go_term['namespace']
+                }
+                # Escribimos la fila en el archivo CSV
+                escritor_csv.writerow(fila)
+    print(f'The csv file with GO annotations has been successfully generated.\nThis files was created in {archivo} ')
+
 
 
 
