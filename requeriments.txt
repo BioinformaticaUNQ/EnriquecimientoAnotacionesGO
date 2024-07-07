@@ -4,3 +4,4 @@ biopython
 goatools
 click
 opencv-python
+pillow

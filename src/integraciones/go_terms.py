@@ -2,6 +2,10 @@ import os
 import csv
 from goatools.base import download_go_basic_obo
 from goatools.cli.gosubdag_plot import PlotCli
+from pathlib import Path
+
+path = Path(os.path.abspath(__file__))
+obopath = os.path.join(path.parents[1],"downloads","go-basic.obo")
 
 #Lee el archivo .obo y retorna una lista de términos.
 def read_field(file_path):
@@ -52,7 +56,8 @@ def get_name_namespace_from_field(terminos,go_ids):
 # Función para descargar el archivo necesario para el enriquecimiento
 def download_go_term_field():
     # Ruta completa del archivo de destino
-    destino = os.path.join("downloads", "go-basic.obo")
+
+    destino = os.path.join(path.parents[1], "downloads", "go-basic.obo")
 
     # Verificar si el archivo existe y borrarlo si es así
     if os.path.exists(destino):
@@ -76,7 +81,9 @@ def show_go_terms(go_terms):
 
 # Función para comparar términos GO mediante codigos de uniprot
 def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
-    terminos = read_field("downloads/go-basic.obo")
+
+    
+    terminos = read_field(os.path.join(path.parents[1],"downloads","go-basic.obo"))
 
     set1 = set(go_terms1)
     set2 = set(go_terms2)
@@ -99,7 +106,11 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
 
 
 def plotGOTComparison(goTermA,goTermB,drawChildren=False,relationships=False):
-    options={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
+    
+
+    #comparisonFile = os.path.join(path.parents[1], "downloads" , "comparison.png")
+    options={'GO': [goTermA,goTermB], 'obo': "downloads/go-basic.obo", 'outfile': "downloads/comparison.png", 'rankdir': 'TB'}
+    print(options)
     if drawChildren:
         options['draw-children']=True
     if relationships:
@@ -116,7 +127,7 @@ def plotGOTComparison(goTermA,goTermB,drawChildren=False,relationships=False):
     PlotCli().cli(options)
     
 def get_go_terms_detail(go_terms_uniprots_list):
-    terminos = read_field("downloads/go-basic.obo")
+    terminos = read_field(os.path.join(path.parents[1],"downloads","go-basic.obo"))
 
     result = []
     for res in go_terms_uniprots_list:
@@ -136,7 +147,7 @@ def get_go_terms_detail(go_terms_uniprots_list):
 def write_score_go(anotaciones, archivo_base='score_go.csv'):
 
     # Generamos un nombre de archivo único si el archivo ya existe
-    archivo = os.path.join('score-go-results', archivo_base)
+    archivo = os.path.join(path.parents[1],'score-go-results', archivo_base)
     contador = 1
     nombre_base, extension = os.path.splitext(archivo)
     

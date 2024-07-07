@@ -78,7 +78,7 @@ class BlastClient():
 
 
 
-    def run_query(self, protein, database, blast_args):
+    def run_query(self, protein, database, outfile, blast_args):
         
         if not os.path.isfile(os.path.join(self.proteins_path, protein + ".fasta")):
             raise FileNotFoundException("Protein not found in files. Run query-protein")
@@ -88,10 +88,13 @@ class BlastClient():
 
         result = ""
 
-        if "-out" in blast_args:
-            index = blast_args.index("-out")
-            result = os.path.join (self.results_path, blast_args[index+1])
-            blast_args[index + 1] =  os.path.join ('/blast/results', blast_args[index + 1] )
+        # if "-out" in blast_args:
+        #     index = blast_args.index("-out")
+        #     result = os.path.join (self.results_path, blast_args[index+1])
+        #     blast_args[index + 1] =  os.path.join ('/blast/results', blast_args[index + 1] )
+
+        result = os.path.join (self.results_path, outfile + ".json")
+        outfile = os.path.join ('/blast/results', outfile + ".json" )
 
         command = f'docker run --rm \
                 -v {self.db_path}:/blast/blastdb_custom:rw \
@@ -99,7 +102,7 @@ class BlastClient():
                 -v {self.results_path}:/blast/results:rw \
                 ncbi/blast \
                 blastp -query /blast/queries/{protein}.fasta \
-                -db {database} -outfmt 15'
+                -db {database} -outfmt 15 -out {outfile}'
         
         for arg in blast_args:
             command += f" {arg}"
@@ -141,15 +144,21 @@ class BlastClient():
 
     def save_ids(self, file_path):
 
-        with open(file_path) as file:
-            prots = json.load(file)
+        file_path = os.path.join(self.results_path, file_path)
 
-        file.close()
-        matchs = prots['BlastOutput2'][0]["report"]["results"]["search"]["hits"]
+        if not os.path.exists(file_path):
+            raise FileNotFoundException(f"The file {file_path} does not exist in integraciones/blast/results.\nPlease check that the file exists, it also has to be in json format.\nIf it does not exist, please run the run_blast command and follow the steps indicated in the help.")
+         
+        else:
 
-        ids = [match["description"][0]["accession"] for match in matchs]
-        print(ids)
-        return (ids)
+            with open(file_path) as file:
+                prots = json.load(file)
+
+            file.close()
+            matchs = prots['BlastOutput2'][0]["report"]["results"]["search"]["hits"]
+
+            ids = [match["description"][0]["accession"] for match in matchs]
+            return (ids)
 
 
     def produce_log(self, results, database):

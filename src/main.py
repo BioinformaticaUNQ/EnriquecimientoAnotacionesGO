@@ -7,6 +7,7 @@ import sys
 from integraciones.go_terms import *
 import cv2
 from screeninfo import get_monitors
+from PIL import Image
 
 ## pathlib
 
@@ -88,22 +89,15 @@ def score_go(namefield):
 
 def get_uniprotIds_from_field(name_field):
 
-    file_path  = f"integraciones/blast/results/{name_field}.txt"
-    if not os.path.exists(file_path):
-        print(f"The file {file_path} does not exist in integraciones/blast/results.\nPlease check that the file exists, it also has to be in txt format.\nIf it does not exist, please run the run_blast command and follow the steps indicated in the help.")
-        return None
-    
+    blastClient = BlastClient()
     try:
-        with open(file_path, 'r') as file:
-            contenido = file.read()
-
-        lista_strings = contenido.strip('[]').split(', ')
-        uniprot_ids_list = [entry.strip().strip("'") for entry in lista_strings]
+        uniprot_ids_list = blastClient.save_ids(name_field)
     except Exception as e:
-        print(f"An error occurred while processing the file {file_path}: {e}")
+        print(e)
+        print(f"An error occurred while processing the file {name_field}: {e}")
         return None
-    
-    return uniprot_ids_list
+    else:
+        return uniprot_ids_list
 
 
     
@@ -132,7 +126,7 @@ def query_protein(protein,v):
 
 class HelpfulCmd(click.Command):
     def format_help(self, ctx, formatter):
-        click.echo("USAGE: main.py run-blast PROTEIN DATABASE [OPTIONS]")
+        click.echo("USAGE: main.py run-blast PROTEIN DATABASE OUTFILENAME [OPTIONS]")
         click.echo(blastClient.show_help())
         click.echo("-outfmt has been set to a json format")
 
@@ -145,9 +139,10 @@ class HelpfulCmd(click.Command):
 ))
 @click.argument('protein', required= True)
 @click.argument('database',required= True)
-def run_blast(protein, database):
+@click.argument('outfile',required= True)
+def run_blast(protein, database, outfile):
 
-    args = sys.argv[4:]
+    args = sys.argv[5:]
 
     if ("-outfmt" in args):
 
@@ -155,8 +150,14 @@ def run_blast(protein, database):
         args.pop(outIndex)
         args.pop(outIndex)
 
+    if ("-out" in args):
+
+        outIndex = args.index("-out")
+        args.pop(outIndex)
+        args.pop(outIndex) 
+
     if not "-remote" in args and not blastClient.db_exists(database):
-        dbfile = input("Database not found, insert database file:")
+        dbfile = input("Database not found, insert database file inside blast/database directory:")
         db_args = list(dbfile.split(" "))
 
         try:
@@ -166,7 +167,7 @@ def run_blast(protein, database):
             return
 
     try:
-        blastClient.run_query(protein, database, args)
+        blastClient.run_query(protein, database, outfile, args)
     except Exception as e:
         print(e)
     
@@ -176,6 +177,9 @@ def run_blast(protein, database):
 @click.option('--swissprot', is_flag=True, default= False )
 @click.option('--trembl', is_flag=True, default= False )
 def get_database(swissprot, trembl):
+    """Add swissprot or trembl databases to locally working databases.
+    """
+
 
     if (swissprot and not blastClient.db_exists('swissprot')):
         blastClient.download_database('swissprot')
@@ -224,7 +228,6 @@ def plotGoTerms(goterma,gotermb,children,relationships):
 
     [GOTERMB] is a second GO Term to be compared."""
     plotGOTComparison(goterma,gotermb,children,relationships)
-    from PIL import Image
     im = Image.open("downloads/comparison.png")
     im.show()
     
