@@ -6,6 +6,7 @@ import os
 import sys
 from integraciones.go_terms import *
 import cv2
+from screeninfo import get_monitors
 
 ## pathlib
 
@@ -155,12 +156,21 @@ def read_file(filename):
 @main.command(short_help='Show graph of comparison of 2 go terms')
 @click.argument('goTermA', required=True)
 @click.argument('goTermB', required=True)
-def plotGoTerms(goterma,gotermb):
-    plotGOTComparison(goterma,gotermb)
+@click.option('--children', is_flag=True, default= False )
+@click.option('--relationships', is_flag=True, default= False )
+def plotGoTerms(goterma,gotermb,children,relationships):
+    plotGOTComparison(goterma,gotermb,children,relationships)
+    from PIL import Image
+    im = Image.open("downloads/comparison.png")
+    im.show()
     
+    """for m in get_monitors():
+        if m.is_primary:
+            maxHeight=m.height
+            maxWidth=m.width
     
     maxScaleUp = 100
-    scaleFactor = 1
+    scaleFactor = 30
     windowName = "COMPARING " + goterma + " AND " + gotermb
     trackbarValue = "Scale"
   
@@ -168,12 +178,14 @@ def plotGoTerms(goterma,gotermb):
     image = cv2.imread("downloads/comparison.png")
     
     # Create a window to display results and  set the flag to Autosize
-    cv2.namedWindow(windowName, cv2.WINDOW_AUTOSIZE)
+    cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
     
     # Callback functions
     def scaleImage(*args):
         # Get the scale factor from the trackbar 
-        scaleFactor = 1+ args[0]/100.0
+        scaleFactor = args[0]/100.0
+        
+        print (str(args[0]) + " ==> " + str(scaleFactor))
         # Resize the image
         scaledImage = cv2.resize(image, None, fx=scaleFactor, fy = scaleFactor, interpolation = cv2.INTER_LINEAR)
         cv2.imshow(windowName, scaledImage)
@@ -181,10 +193,12 @@ def plotGoTerms(goterma,gotermb):
     # Create trackbar and associate a callback function
     cv2.createTrackbar(trackbarValue, windowName, scaleFactor, maxScaleUp, scaleImage)
     
+    
     # Display the image
     cv2.imshow(windowName, image)
     c = cv2.waitKey(0)
     cv2.destroyAllWindows()
+    """
     
 
 if __name__ == '__main__':

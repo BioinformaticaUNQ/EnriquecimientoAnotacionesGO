@@ -97,9 +97,22 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
     show_go_terms(go_terms2_enrichment)
 
 
-def plotGOTComparison(goTermA,goTermB):
-    obj={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
-    PlotCli().cli(obj)
+def plotGOTComparison(goTermA,goTermB,drawChildren=False,relationships=False):
+    options={'GO': [goTermA,goTermB], 'obo': 'downloads/go-basic.obo', 'outfile': 'downloads/comparison.png', 'rankdir': 'TB'}
+    if drawChildren:
+        options['draw-children']=True
+    if relationships:
+        #Ver si hay forma de filtrar tipos de relaciones
+        options['relationships']='part_of,regulates'
+        
+    
+    #options['parentcnt']=0
+    #options['title']="quique"
+    #print (options)
+    
+    
+    
+    PlotCli().cli(options)
     
 def get_go_terms_detail(go_terms_uniprots_list):
     terminos = read_field("downloads/go-basic.obo")
