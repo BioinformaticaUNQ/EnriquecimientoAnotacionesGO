@@ -233,5 +233,4 @@ def plotGoTerms(goterma,gotermb,children,relationships):
     
 
 if __name__ == '__main__':
-    
     main()
