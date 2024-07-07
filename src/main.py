@@ -48,23 +48,48 @@ def compare_goterms(proteinone, proteintwo):
 
 
 @main.command(short_help='obtains Go terms and their details from a UniprotId code or a list of them.')
-@click.argument('codigouniprotids', required=True)
-def score_go(codigouniprotids):
-
-    uniprot_ids_list = codigouniprotids.split(',')
-
-    if len(uniprot_ids_list) >= 10:
-        print("At most we can search for 10 uniprot codes, please enter 10 codes or less")
+@click.argument('namefield', required=True)
+def score_go(namefield):
+    uniprot_ids_list = get_uniprotIds_from_field(namefield)    
+    if(uniprot_ids_list == None):
         return
+
+    try:
+        go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
+        if go_terms is None:
+            print("Could not get GO terms for one or both IDs")
+            return
+
+        go_terms_enrichemt = get_go_terms_detail(go_terms)
+        
+        write_score_go(go_terms_enrichemt)
+    except InvalidRequestException as ex:
+        ex.printMe()
+        return
+    except Exception as e:
+        print(f"Error: An error occurred while processing the file {namefield}: {e}")
+        return 
     
-    go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
-    if go_terms is None:
-        print("Could not get GO terms for one or both IDs")
-        return
 
-    go_terms_enrichemt = get_go_terms_detail(go_terms)
-  
-    print(go_terms_enrichemt)
+def get_uniprotIds_from_field(name_field):
+
+    file_path  = f"integraciones/blast/results/{name_field}.txt"
+    if not os.path.exists(file_path):
+        print(f"The file {file_path} does not exist in integraciones/blast/results.\nPlease check that the file exists, it also has to be in txt format.\nIf it does not exist, please run the run_blast command and follow the steps indicated in the help.")
+        return None
+    
+    try:
+        with open(file_path, 'r') as file:
+            contenido = file.read()
+
+        lista_strings = contenido.strip('[]').split(', ')
+        uniprot_ids_list = [entry.strip().strip("'") for entry in lista_strings]
+    except Exception as e:
+        print(f"An error occurred while processing the file {file_path}: {e}")
+        return None
+    
+    return uniprot_ids_list
+
 
     
 def getProteinFromUniprot(uniprotId):
