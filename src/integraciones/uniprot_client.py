@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class InvalidRequestException(Exception):
-    def __init__(self, message="An error occurred in the query. Please check the Uniprot code"):
+    def __init__(self, message="An error occurred in the query. Please check the Uniprot ID"):
         super().__init__(message)
         self.message = message
     

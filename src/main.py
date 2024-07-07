@@ -16,11 +16,15 @@ blastClient = BlastClient()
 
 @click.group()
 def main():
+    """This tool provides support for Enrichment of Go Notations."""
     pass
 
 @main.command(short_help='Returns all protein\'s GO Terms')
 @click.argument('protein', required=True)
 def get_GoTerms(protein):
+    """Returns all protein\'s GO Terms.
+    
+    [PROTEIN] is a Uniprot ID of a protein from which we want to obtain the GO Terms."""
     uniprotClient=UniprotClient()
 
     response = uniprotClient.getCrossReferences(protein)
@@ -30,13 +34,24 @@ def get_GoTerms(protein):
 
 @main.command(short_help='Download the file needed for GO enrichment.')
 def download_go_basic_obo():
+    """Run this command to download de go-basic definitions from obolibrary.org
+    
+    This commands only need an Internet Connection"""
     download_go_term_field() 
     print ("Go-basic.obo file has been downloaded successfully.")
+
+
 
 @main.command(short_help='Compares the Go Terms of 2 proteins and returns a result.')
 @click.argument('proteinone', required=True)
 @click.argument('proteintwo', required=True)
 def compare_goterms(proteinone, proteintwo):
+    """Compares the GO Terms of 2 proteins and returns a result.
+    
+        [PROTEINONE] is a Uniprot ID of a protein.
+
+        [PROTEINTWO] is a Uniprot ID of an another protein."""
+
     go_terms1 = uniprotClient.getGoTerms(proteinone)
     go_terms2 = uniprotClient.getGoTerms(proteintwo)
 
@@ -92,12 +107,13 @@ def get_uniprotIds_from_field(name_field):
 
 
     
-def getProteinFromUniprot(uniprotId):
+def getProteinFromUniprot(uniprotId,verbose):
     uniprotClient=UniprotClient()
 
     try:
         response = uniprotClient.getSequenceFromProtein(uniprotId)
-        print (response)
+        if verbose:
+            print (response)
     except InvalidRequestException as e:
         e.printMe()
     except Exception:
@@ -105,10 +121,13 @@ def getProteinFromUniprot(uniprotId):
 
 @main.command(short_help='Returns an aminoacid sequence for a given protein.')
 @click.argument('protein', required=True)
-def query_protein(protein):
+@click.option('-v', is_flag=True, default= False,help='Allow to view response sequence in command line.' )
+def query_protein(protein,v):
+    """Returns an aminoacid sequence for a given protein.
+    
+    [PROTEIN] is a Uniprot ID of a protein."""
 
-
-    getProteinFromUniprot(protein)
+    getProteinFromUniprot(protein,v)
     
 
 class HelpfulCmd(click.Command):
@@ -162,11 +181,16 @@ def readFile(filename):
         file.close() 
         return lines
     except FileNotFoundError:
-        print ("El archivo indicado no existe")
+        print ("The file {0} can not be reached. Check filename and path.".format(filename))
 
-@main.command(short_help='Reads all Uniprot ID from a given file.')
+@main.command(short_help='Reads all Uniprot ID from a given file and get its aminoacids sequence.')
 @click.argument('filename', required=True)
 def read_file(filename):
+    """Reads all Uniprot ID from a given file and get its aminoacids sequence.
+    
+    [FILENAME] is a simple flat text file with any extension you like.
+    Just put each Uniprot ID per row and it will be readed.
+    """
 
     uniprotCodes =readFile(filename)
     if uniprotCodes!=None:
@@ -177,13 +201,19 @@ def read_file(filename):
             except InvalidRequestException as e:
                 e.printMe()
             
+
     
 @main.command(short_help='Shows a hierarchy graph comparing of 2 GO Terms')
 @click.argument('goTermA', required=True)
 @click.argument('goTermB', required=True)
-@click.option('--children', is_flag=True, default= False )
-@click.option('--relationships', is_flag=True, default= False )
+@click.option('--children', is_flag=True, default= False,help="Show all children relationships" )
+@click.option('--relationships', is_flag=True, default= False, help="Show all ancestors relationships (part_of, regulates, positively regulates, negatively regulates)")
 def plotGoTerms(goterma,gotermb,children,relationships):
+    """Shows a hierarchy graph comparing of 2 GO Terms.
+    
+    [GOTERMA] is a first GO Term to be compared.
+
+    [GOTERMB] is a second GO Term to be compared."""
     plotGOTComparison(goterma,gotermb,children,relationships)
     from PIL import Image
     im = Image.open("downloads/comparison.png")
@@ -191,4 +221,5 @@ def plotGoTerms(goterma,gotermb,children,relationships):
     
 
 if __name__ == '__main__':
+    
     main()
