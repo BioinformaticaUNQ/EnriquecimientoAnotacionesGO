@@ -18,7 +18,7 @@ blastClient = BlastClient()
 def main():
     pass
 
-@main.command(short_help='Retorna los terminos go para una proteina.')
+@main.command(short_help='Returns all protein\'s GO Terms')
 @click.argument('protein', required=True)
 def get_GoTerms(protein):
     uniprotClient=UniprotClient()
@@ -28,12 +28,12 @@ def get_GoTerms(protein):
     print (response)
 
 
-@main.command(short_help='Download the file needed for GO enrichment')
+@main.command(short_help='Download the file needed for GO enrichment.')
 def download_go_basic_obo():
     download_go_term_field() 
     print ("Go-basic.obo file has been downloaded successfully.")
 
-@main.command(short_help='Compares the GoTerms of 2 proteins and returns a result.')
+@main.command(short_help='Compares the Go Terms of 2 proteins and returns a result.')
 @click.argument('proteinone', required=True)
 @click.argument('proteintwo', required=True)
 def compare_goterms(proteinone, proteintwo):
@@ -41,13 +41,13 @@ def compare_goterms(proteinone, proteintwo):
     go_terms2 = uniprotClient.getGoTerms(proteintwo)
 
     if go_terms1 is None or go_terms2 is None:
-        print("Could not get GO terms for one or both IDs")
+        print("Could not get GO Terms for one or both IDs")
         return
   
     compare_go_terms(proteinone,proteintwo,go_terms1,go_terms2)
 
 
-@main.command(short_help='obtains Go terms and their details from a UniprotId code or a list of them.')
+@main.command(short_help='Obtains Go Terms and their details from a Uniprot ID code or a list of them.')
 @click.argument('namefield', required=True)
 def score_go(namefield):
     uniprot_ids_list = get_uniprotIds_from_field(namefield)    
@@ -57,7 +57,7 @@ def score_go(namefield):
     try:
         go_terms = uniprotClient.getManyGoTerms(uniprot_ids_list)
         if go_terms is None:
-            print("Could not get GO terms for one or both IDs")
+            print("Could not get GO Terms for one or both IDs")
             return
 
         go_terms_enrichemt = get_go_terms_detail(go_terms)
@@ -103,7 +103,7 @@ def getProteinFromUniprot(uniprotId):
     except Exception:
         print ("OCURRIÓ UN ERROR INESPERADO")
 
-@main.command(short_help='Retorna una secuencia de aminoacidos para la proteina solicitada.')
+@main.command(short_help='Returns an aminoacid sequence for a given protein.')
 @click.argument('protein', required=True)
 def query_protein(protein):
 
@@ -164,7 +164,7 @@ def readFile(filename):
     except FileNotFoundError:
         print ("El archivo indicado no existe")
 
-@main.command(short_help='Lee desde archivo los diferentes codigos uniprot')
+@main.command(short_help='Reads all Uniprot ID from a given file.')
 @click.argument('filename', required=True)
 def read_file(filename):
 
@@ -178,7 +178,7 @@ def read_file(filename):
                 e.printMe()
             
     
-@main.command(short_help='Show graph of comparison of 2 go terms')
+@main.command(short_help='Shows a hierarchy graph comparing of 2 GO Terms')
 @click.argument('goTermA', required=True)
 @click.argument('goTermB', required=True)
 @click.option('--children', is_flag=True, default= False )
@@ -188,42 +188,6 @@ def plotGoTerms(goterma,gotermb,children,relationships):
     from PIL import Image
     im = Image.open("downloads/comparison.png")
     im.show()
-    
-    """for m in get_monitors():
-        if m.is_primary:
-            maxHeight=m.height
-            maxWidth=m.width
-    
-    maxScaleUp = 100
-    scaleFactor = 30
-    windowName = "COMPARING " + goterma + " AND " + gotermb
-    trackbarValue = "Scale"
-  
-    # read the image
-    image = cv2.imread("downloads/comparison.png")
-    
-    # Create a window to display results and  set the flag to Autosize
-    cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
-    
-    # Callback functions
-    def scaleImage(*args):
-        # Get the scale factor from the trackbar 
-        scaleFactor = args[0]/100.0
-        
-        print (str(args[0]) + " ==> " + str(scaleFactor))
-        # Resize the image
-        scaledImage = cv2.resize(image, None, fx=scaleFactor, fy = scaleFactor, interpolation = cv2.INTER_LINEAR)
-        cv2.imshow(windowName, scaledImage)
-    
-    # Create trackbar and associate a callback function
-    cv2.createTrackbar(trackbarValue, windowName, scaleFactor, maxScaleUp, scaleImage)
-    
-    
-    # Display the image
-    cv2.imshow(windowName, image)
-    c = cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    """
     
 
 if __name__ == '__main__':
