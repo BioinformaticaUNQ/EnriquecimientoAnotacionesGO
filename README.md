@@ -189,6 +189,7 @@ Where options are:
 To read each uniprot ID in file 
 ```bash
 read-file /home/user/100proteins.txt
+```
 
 ## Compare Go Terms graphically
 Get a hierarchy graph comparing 2 GO Terms
