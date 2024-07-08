@@ -80,7 +80,7 @@ class BlastClient():
             os.mkdir(self.results_path)
 
         result = os.path.join (self.results_path, outfile + ".json")
-        outfile = os.path.join ('/blast/results', outfile + ".json" )
+        outfile = os.path.join ('/blast/results/' +  outfile + ".json" )
 
         command = f'docker run --rm \
                 -v {self.db_path}:/blast/blastdb_custom:rw \
