@@ -98,7 +98,7 @@ class BlastClient():
         except Exception:
             raise BlastQueryException("BLAST blastp error in query run")
         else:
-            self.produce_log(result, database)
+           self.produce_log(result, database)
                  
 
 
@@ -184,6 +184,6 @@ class BlastClient():
 
             ids.append(match["description"][0]['accession'])
 
-        total =  blast['BlastOutput2'][0]["report"]["results"]["search"]["db_num"]
-        file.write("Missed sequences: " + { total - len( matchs)} + "\n")
+        total = report["results"]["search"]["stat"]["db_num"]
+        file.write("Missed sequences: "+str({ total - len( matchs)}) + "\n")
 
