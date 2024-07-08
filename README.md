@@ -204,5 +204,6 @@ Where options are:
 To plot a graph comparison from hierachy between GO:0020007 GO:0016324 whitout childrens and showin only IS_A relationships
 ```bash
 plotgoterms GO:0016324 GO:0020007
+```
 
 ![Alt text](https://github.com/BioinformaticaUNQ/EnriquecimientoAnotacionesGO/images/PlotGoTerms.png "Results example of a plotgoterms command")
