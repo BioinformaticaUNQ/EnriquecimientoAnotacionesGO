@@ -67,14 +67,7 @@ class BlastClient():
         for arg in blast_args: 
             command += " " + arg
 
-        command2 = f'docker run --rm \
-                -v {self.db_path}:/blast/blastdb_custom:rw \
-                -w /blast/blastdb_custom \
-                ncbi/blast \
-                blastdbcmd -db /blast/blastdb_custom/{database} -entry all -out {database}.info -outfmt %a'
-
         subprocess.run(command, shell=True, check=True)
-        subprocess.run(command2, shell=True, check=True)
 
 
 
@@ -191,13 +184,6 @@ class BlastClient():
 
             ids.append(match["description"][0]['accession'])
 
-        db_ids = open( os.path.join (self.db_path, database + ".info"), "r")
-        
-        count = 0
-        for line in db_ids:
-            line = line.strip()
-            if not line in ids:
-                count += 1
-
-        file.write("Missed sequences: " + str(count) + "\n")
+        total =  blast['BlastOutput2'][0]["report"]["results"]["search"]["db_num"]
+        file.write("Missed sequences: " + { total - len( matchs)} + "\n")
 
