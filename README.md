@@ -166,11 +166,23 @@ query-protein [uniprotCode] [options]
 ```
 
 Where options are:
-* -v    Allow to view response sequence in command line
-* -f    Force protein request even if have already downloaded
+* -v\tAllow to view response sequence in command line
+* -f\tForce protein request even if have already downloaded
 
 ### Example:
 To get protein related to uniprot id O95905:
 ```bash
 query-protein O95905
 ```
+
+## Read batch aminoacid's sequences from a file
+You can read a massive quantity of Uniprot ID from a file and get each aminoacids sequence.
+Use a plain text file with one Uniprot ID by row.
+```bash
+read-file [filename]
+```
+
+### Example:
+To read each uniprot ID in file 
+```bash
+read-file /home/user/100proteins.txt
