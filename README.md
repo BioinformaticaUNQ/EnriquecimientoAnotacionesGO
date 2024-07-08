@@ -166,8 +166,8 @@ query-protein [uniprotCode] [options]
 ```
 
 Where options are:
-* -v\tAllow to view response sequence in command line
-* -f\tForce protein request even if have already downloaded
+* -v&nbsp;&nbsp;&nbsp;Allow to view response sequence in command line
+* -f&nbsp;&nbsp;&nbsp;Force protein request even if have already downloaded
 
 ### Example:
 To get protein related to uniprot id O95905:
@@ -181,8 +181,26 @@ Use a plain text file with one Uniprot ID by row.
 ```bash
 read-file [filename]
 ```
+Where options are:
+-h&nbsp;&nbsp;&nbsp;Allow to hide response sequence in command line
+-f&nbsp;&nbsp;&nbsp;Force protein request even if have already downloaded
 
 ### Example:
 To read each uniprot ID in file 
 ```bash
 read-file /home/user/100proteins.txt
+
+## Compare Go Terms graphically
+Get a hierarchy graph comparing 2 GO Terms
+
+```bash
+plotgoterms [goterm] [goterm] [options]
+```
+Where options are:
+-children&nbsp;&nbsp;&nbsp;Show all children relationships
+-relationships&nbsp;&nbsp;&nbsp;Show all ancestors relationships (part_of, regulates, positively regulates, negatively regulates)
+
+### Example:
+To plot a graph comparison from hierachy between GO:0020007 GO:0016324 whitout childrens and showin only IS_A relationships
+```bash
+plotgoterms GO:0016324 GO:0020007
