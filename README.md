@@ -159,7 +159,7 @@ get-goterms[uniprotCode]
 
 
 
-## query-protein
+## Get an aminoacid sequence
 Get an aminoacid sequence for a given protein.
 ```bash
 query-protein [uniprotCode] [options]
