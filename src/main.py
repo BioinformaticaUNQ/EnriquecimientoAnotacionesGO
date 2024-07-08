@@ -101,7 +101,7 @@ def get_uniprotIds_from_field(name_field):
 
 
     
-def getProteinFromUniprot(uniprotId,verbose,force):
+def getProteinFromUniprot(uniprotId,verbose=True,force=True):
     uniprotClient=UniprotClient()
 
     try:
@@ -205,7 +205,9 @@ def readFile(filename):
 
 @main.command(short_help='Reads all Uniprot ID from a given file and get its aminoacids sequence.')
 @click.argument('filename', required=True)
-def read_file(filename):
+@click.option('-h', is_flag=True, default= False,help='Allow to hide response sequence in command line.' )
+@click.option('-f', is_flag=True, default= False,help='Force protein request even if have already downloaded.' )
+def read_file(filename,h,f):
     """Reads all Uniprot ID from a given file and get its aminoacids sequence.
     
     [FILENAME] is a simple flat text file with any extension you like.
@@ -217,7 +219,7 @@ def read_file(filename):
 
         for eachUniprotCode in uniprotCodes:
             try:
-                getProteinFromUniprot(eachUniprotCode)
+                getProteinFromUniprot(eachUniprotCode,not h,f)
             except InvalidRequestException as e:
                 e.printMe()
             
