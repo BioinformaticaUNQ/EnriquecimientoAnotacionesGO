@@ -198,7 +198,9 @@ Get a hierarchy graph comparing 2 GO Terms
 plotgoterms [goterm] [goterm] [options]
 ```
 Where options are:
+
 -children&nbsp;&nbsp;&nbsp;Show all children relationships
+
 -relationships&nbsp;&nbsp;&nbsp;Show all ancestors relationships (part_of, regulates, positively regulates, negatively regulates)
 
 ### Example:
