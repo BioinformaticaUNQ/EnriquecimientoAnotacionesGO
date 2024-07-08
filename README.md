@@ -206,4 +206,4 @@ To plot a graph comparison from hierachy between GO:0020007 GO:0016324 whitout c
 plotgoterms GO:0016324 GO:0020007
 ```
 
-![Alt text](https://github.com/BioinformaticaUNQ/EnriquecimientoAnotacionesGO/images/PlotGoTerms.png "Results example of a plotgoterms command")
+![Alt text](https://github.com/BioinformaticaUNQ/EnriquecimientoAnotacionesGO/blob/main/images/PlotGoTerms.png "Results example of a plotgoterms command")
