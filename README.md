@@ -149,3 +149,28 @@ score-go [field_name]
 ### Ejemplo:
 If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
 ```bash
+
+## Get Go Terms
+
+Returns the go terms for a protein.
+```bash
+get-goterms[uniprotCode]
+```
+
+
+
+## query-protein
+Get an aminoacid sequence for a given protein.
+```bash
+query-protein [uniprotCode] [options]
+```
+
+Where options are:
+* -v    Allow to view response sequence in command line
+* -f    Force protein request even if have already downloaded
+
+### Example:
+To get protein related to uniprot id O95905:
+```bash
+query-protein O95905
+```
