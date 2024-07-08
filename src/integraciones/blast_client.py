@@ -17,9 +17,9 @@ class BlastClient():
 
     def __init__(self): 
         self.path = Path(os.path.abspath(__file__))
-        self.db_path= os.path.join(self.path.parent, "blast/database")
-        self.proteins_path= os.path.join(self.path.parent, "blast/proteins")
-        self.results_path= os.path.join(self.path.parent, "blast/results")
+        self.db_path= os.path.join(self.path.parent, "blast","database")
+        self.proteins_path= os.path.join(self.path.parent, "blast","proteins")
+        self.results_path= os.path.join(self.path.parent, "blast","results")
     
 
     def print_output(self, subprocess):
@@ -85,13 +85,6 @@ class BlastClient():
 
         if not os.path.isdir( self.results_path): 
             os.mkdir(self.results_path)
-
-        result = ""
-
-        # if "-out" in blast_args:
-        #     index = blast_args.index("-out")
-        #     result = os.path.join (self.results_path, blast_args[index+1])
-        #     blast_args[index + 1] =  os.path.join ('/blast/results', blast_args[index + 1] )
 
         result = os.path.join (self.results_path, outfile + ".json")
         outfile = os.path.join ('/blast/results', outfile + ".json" )
@@ -207,5 +200,4 @@ class BlastClient():
                 count += 1
 
         file.write("Missed sequences: " + str(count) + "\n")
-
 
