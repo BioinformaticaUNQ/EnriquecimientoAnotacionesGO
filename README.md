@@ -11,7 +11,7 @@ CLI that allows comparison and enrichment of homologous proteins
 
 ### Prerequisites
 
-<<<<<<< HEAD
+
 ### Step 1. Install Docker
 In a production system, Docker has to be installed as an application.  
 
@@ -28,22 +28,9 @@ To confirm the correct installation of Docker, run the command `docker run hello
 
 See docker [install](https://docs.docker.com/engine/install/) for another system options.
   
-### Docker run command options
-*This section is optional.*    
-  
-Below is a list of `docker run` command line [options](https://docs.docker.com/engine/reference/commandline/run/) used in this tutorial.
-
-| Name, short-hand(if available) | Description |
-| :----------------------------  | :---------- |
-|`--rm`|Automatically remove the container when it exits|
-|`--volume` , `-v`|Bind mount a volume|
-|`--workdir` , `-w`| Working directory inside the container|
 
 
 ### Step 2. Set virtual enviroment
-
-=======
->>>>>>> 9fdb3c5b7d38a04a7bf1c86d41dfce3c888732b1
 Make sure you have Python 3 installed on your system. You can check the installed Python version with the following command:
 
 ```sh
@@ -84,18 +71,36 @@ Returns an amino acid sequence for the requested protein.
 query-protein [codigoUniprot]
 ```
 
-<<<<<<< HEAD
+
 ## run-blast
 
-Executes a blast query run and returns the results of that run.
+Executes a blast query run and returns the results of that run. The results will shown in a .json file of the given name.
+(-outfmt and -out blastp parameters had been set)
 ```bash
 run-blast [protein] [dataBase] [outfile name] {blastp args}
-=======
-Executes a blast run and returns the results of that run.
-```bash
-run-blast [protein] [dataBase] 
->>>>>>> 9fdb3c5b7d38a04a7bf1c86d41dfce3c888732b1
 ```
+
+If the database was not found, user will be ask to insert the name of a fasta file to create the database.
+This file has to be inside the blast/database folder
+
+```bash
+Database not found, insert database file inside blast/database directory: Database.fasta
+```
+
+The parameter -remote can be added to perform the query in ncbi remote blast servers. In case of using this functionality swissprot is recommend to continue with the Go enrichment features.
+```bash
+run-blast P04439 swissprot result -remote -max_target_seqs 20
+```
+
+## download-query
+Download the swissprot or trembl databases and add them to the working locally databases.
+```bash
+get-database -swissprot -trembl
+```
+If -swissprot is set the swissprot database will be downloaded. If-trembl is set the trembl database will be downloaded\
+ 
+> :warning: **WARNING: The trembl database size is 52 GB**
+## Get Go Terms
 
 Returns the go terms for a protein.
 ```bash
@@ -103,15 +108,14 @@ get-goterms[uniprotCode]
 ```
 
 
+
 ## compare-goterms
 Gets and compares the GoTerms given by parameter.
 ```bash
 compare-goterms [uniprotCode1] [uniprotCode2]
-<<<<<<< HEAD
-=======
 ```
 
-### Ejemplo:
+### Example:
 To compare the GO terms of UniProt codes P12345 and Q67890:
 ```bash
 compare-goterms P12345 Q67890
@@ -128,8 +132,6 @@ score-go [field_name]
 If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
 ```bash
 score-go uniprot_codes.json
->>>>>>> 9fdb3c5b7d38a04a7bf1c86d41dfce3c888732b1
-```
 
 ### Example:
 To compare the GO terms of UniProt codes P12345 and Q67890:
