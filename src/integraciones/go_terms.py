@@ -108,9 +108,10 @@ def compare_go_terms(uniprot_id1,uniprot_id2,go_terms1, go_terms2):
 def plotGOTComparison(goTermA,goTermB,drawChildren=False,relationships=False):
     
 
-    #comparisonFile = os.path.join(path.parents[1], "downloads" , "comparison.png")
-    options={'GO': [goTermA,goTermB], 'obo': "downloads/go-basic.obo", 'outfile': "downloads/comparison.png", 'rankdir': 'TB'}
-    print(options)
+    comparisonFile = os.path.join(path.parents[1], "downloads" , "comparison.png")
+    oboFile = os.path.join(path.parents[1], "downloads" , "go-basic.obo")
+    options={'GO': [goTermA,goTermB], 'obo': oboFile, 'outfile': comparisonFile, 'rankdir': 'TB'}
+    
     if drawChildren:
         options['draw-children']=True
     if relationships:

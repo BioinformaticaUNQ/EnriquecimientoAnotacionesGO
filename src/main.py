@@ -101,27 +101,34 @@ def get_uniprotIds_from_field(name_field):
 
 
     
-def getProteinFromUniprot(uniprotId,verbose):
+def getProteinFromUniprot(uniprotId,verbose=True,force=True):
     uniprotClient=UniprotClient()
 
     try:
-        response = uniprotClient.getSequenceFromProtein(uniprotId)
-        if verbose:
-            print (response)
+        proteinFile=uniprotId + ".fasta"
+        integracionBlastProtein = os.path.join(path.parents[1], "integraciones" ,"blast","proteins",proteinFile)
+        if Path(integracionBlastProtein).exists() and not force:
+            print ("Protein file already exists. Run with -f option to overwrite")
+        elif (Path(integracionBlastProtein).exists() and force) or (not Path(integracionBlastProtein).exists()):
+            response = uniprotClient.getSequenceFromProtein(uniprotId)
+            if verbose:
+                print (response)
     except InvalidRequestException as e:
         e.printMe()
     except Exception:
-        print ("OCURRIÓ UN ERROR INESPERADO")
+        print ("An unexpected error occurred while processing Uniprot ID")
+
 
 @main.command(short_help='Returns an aminoacid sequence for a given protein.')
 @click.argument('protein', required=True)
 @click.option('-v', is_flag=True, default= False,help='Allow to view response sequence in command line.' )
-def query_protein(protein,v):
+@click.option('-f', is_flag=True, default= False,help='Force protein request even if have already downloaded.' )
+def query_protein(protein,v,f):
     """Returns an aminoacid sequence for a given protein.
     
     [PROTEIN] is a Uniprot ID of a protein."""
 
-    getProteinFromUniprot(protein,v)
+    getProteinFromUniprot(protein,v,f)
     
 
 class HelpfulCmd(click.Command):
@@ -198,7 +205,9 @@ def readFile(filename):
 
 @main.command(short_help='Reads all Uniprot ID from a given file and get its aminoacids sequence.')
 @click.argument('filename', required=True)
-def read_file(filename):
+@click.option('-h', is_flag=True, default= False,help='Allow to hide response sequence in command line.' )
+@click.option('-f', is_flag=True, default= False,help='Force protein request even if have already downloaded.' )
+def read_file(filename,h,f):
     """Reads all Uniprot ID from a given file and get its aminoacids sequence.
     
     [FILENAME] is a simple flat text file with any extension you like.
@@ -210,7 +219,7 @@ def read_file(filename):
 
         for eachUniprotCode in uniprotCodes:
             try:
-                getProteinFromUniprot(eachUniprotCode)
+                getProteinFromUniprot(eachUniprotCode,not h,f)
             except InvalidRequestException as e:
                 e.printMe()
             
@@ -227,11 +236,19 @@ def plotGoTerms(goterma,gotermb,children,relationships):
     [GOTERMA] is a first GO Term to be compared.
 
     [GOTERMB] is a second GO Term to be compared."""
-    plotGOTComparison(goterma,gotermb,children,relationships)
-    im = Image.open("downloads/comparison.png")
-    im.show()
+    
+    try:
+        plotGOTComparison(goterma,gotermb,children,relationships)
+        comparisonFile = os.path.join(path.parents[1], "downloads" , "comparison.png")
+        im = Image.open(comparisonFile)
+        im.show()
+    
+    except ValueError as e:
+        print ("Run DOWNLOAD-GO-BASIC-OBO command first!")    
+    except Exception as e:        
+        print (str(e))
+        
     
 
 if __name__ == '__main__':
-    
     main()
