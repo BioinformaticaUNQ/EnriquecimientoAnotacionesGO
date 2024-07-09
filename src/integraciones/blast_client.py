@@ -98,7 +98,8 @@ class BlastClient():
         except Exception:
             raise BlastQueryException("BLAST blastp error in query run")
         else:
-           self.produce_log(result, database)
+           self.produce_log(result)
+           print(f"See results in {result}")
                  
 
 
@@ -126,6 +127,7 @@ class BlastClient():
         self.add_database(database + ".fasta", database, ["-parse_seqids"])
         os.remove(path + ".gz")
         os.remove(path + ".fasta")
+        print("Database succesfully downloaded")
 
 
     def save_ids(self, file_path):
@@ -147,7 +149,7 @@ class BlastClient():
             return (ids)
 
 
-    def produce_log(self, results, database):
+    def produce_log(self, results):
         
         with open(results) as file:
             blast = json.load(file)
