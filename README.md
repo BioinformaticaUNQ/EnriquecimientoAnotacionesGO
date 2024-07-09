@@ -74,8 +74,9 @@ query-protein [codigoUniprot]
 
 ## run-blast
 
-Executes a blast query run and returns the results of that run. The results will shown in a .json file of the given name.
-(-outfmt and -out blastp parameters had been set)
+Executes a blast query run and returns the results of that run. The results will shown in a .json file of the given name, under the Integraciones/blast/results folder.
+(-outfmt and -out blastp parameters had been set) \
+
 ```bash
 run-blast [protein] [dataBase] [outfile name] {blastp args}
 ```
