@@ -128,7 +128,7 @@ The command requests to be sent the name of the file where the uniprots code inf
 score-go [field_name]
 ```
 
-### Ejemplo:
+### Example:
 If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
 ```bash
 score-go uniprot_codes.json
@@ -146,7 +146,7 @@ The command requests to be sent the name of the file where the uniprots code inf
 score-go [field_name]
 ```
 
-### Ejemplo:
+### Example:
 If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
 ```bash
 
