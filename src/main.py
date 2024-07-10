@@ -6,7 +6,6 @@ import os
 import sys
 from integraciones.go_terms import *
 import cv2
-from screeninfo import get_monitors
 from PIL import Image
 
 ## pathlib
@@ -65,7 +64,7 @@ def compare_goterms(proteinone, proteintwo):
 
 @main.command(short_help='Obtains Go Terms and their details from a Uniprot ID code or a list of them.')
 @click.argument('namefield', required=True)
-def score_go(namefield):
+def annotate_go(namefield):
     uniprot_ids_list = get_uniprotIds_from_field(namefield)    
     if(uniprot_ids_list == None):
         return
