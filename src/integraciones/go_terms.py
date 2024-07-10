@@ -145,10 +145,10 @@ def get_go_terms_detail(go_terms_uniprots_list):
     return result        
 
 # Funcion para poder exportar las anotaciones Go calculadas como un csv
-def write_score_go(anotaciones, archivo_base='score_go.csv'):
+def write_score_go(anotaciones, archivo_base='annotate_go.csv'):
 
     # Generamos un nombre de archivo único si el archivo ya existe
-    archivo = os.path.join(path.parents[1],'score-go-results', archivo_base)
+    archivo = os.path.join(path.parents[1],'annotate-go-results', archivo_base)
     contador = 1
     nombre_base, extension = os.path.splitext(archivo)
     
