@@ -5,7 +5,6 @@ from integraciones.blast_client import *
 import os
 import sys
 from integraciones.go_terms import *
-import cv2
 from PIL import Image
 
 ## pathlib
