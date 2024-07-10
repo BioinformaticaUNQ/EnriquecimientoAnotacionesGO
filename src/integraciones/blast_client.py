@@ -170,21 +170,18 @@ class BlastClient():
         
         matchs = blast['BlastOutput2'][0]["report"]["results"]["search"]["hits"]
 
-        ids = []
-
         for match in matchs:
             file.write("    Id: " + match["description"][0]['id'] + "\n")
             file.write("    Title: " + match["description"][0]['title'] + "\n")
             file.write("    Score: " + str(match["hsps"][0]['score']) + "\n")
             file.write("    Evalue: " + str(match["hsps"][0]['evalue'])+ "\n")
-            file.write("    Identity: " + str(match["hsps"][0]['identity'])+ "\n")
+            identity = (match["hsps"][0]["identity"] / match["hsps"][0]["query_to"]) * 100
+            file.write("    Identity: " + str(identity)+ "% \n")
             file.write("    Alignment:\n")
             file.write("        " + match["hsps"][0]['qseq'] + "\n")
             file.write("        " + match["hsps"][0]['midline'] + "\n")
             file.write("        " + match["hsps"][0]['hseq'] + "\n \n")
 
-
-            ids.append(match["description"][0]['accession'])
 
         total = report["results"]["search"]["stat"]["db_num"]
         file.write("Missed sequences: "+str({ total - len( matchs)}) + "\n")

@@ -81,6 +81,10 @@ Executes a blast query run and returns the results of that run. The results will
 run-blast [protein] [dataBase] [outfile name] {blastp args}
 ```
 
+To see the blast parameters and it's default setting see [BLAST® Command Line Applications User Manual](https://www.ncbi.nlm.nih.gov/books/NBK279684/#appendices.Options_for_the_commandline_a)
+
+Note: Identity is the extent to which two (nucleotide or amino acid) sequences have the same residues at the same positions in an alignment, this porcentage can be seen in the blast.log
+
 If the database was not found, user will be ask to insert the name of a fasta file to create the database.
 This file has to be inside the blast/database folder
 
