@@ -122,43 +122,18 @@ To compare the GO terms of UniProt codes P12345 and Q67890:
 compare-goterms P12345 Q67890
 ```
 
-## score-go
+## annotate-go
 Generate a csv file with all the details of the Go-terms for each uniprot code.
 The command requests to be sent the name of the file where the uniprots code information is located.
 ```bash
-score-go [field_name]
+annotate-go [field_name]
 ```
 
 ### Example:
 If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
 ```bash
-score-go uniprot_codes.json
-
-### Example:
-To compare the GO terms of UniProt codes P12345 and Q67890:
-```bash
-compare-goterms P12345 Q67890
+annotate-go uniprot_codes.json
 ```
-
-## score-go
-Generate a csv file with all the details of the Go-terms for each uniprot code.
-The command requests to be sent the name of the file where the uniprots code information is located.
-```bash
-score-go [field_name]
-```
-
-### Example:
-If you have a file called uniprot_codes.json with the UniProt codes, you can generate the CSV with the details of the GO terms using:
-```bash
-
-## Get Go Terms
-
-Returns the go terms for a protein.
-```bash
-get-goterms[uniprotCode]
-```
-
-
 
 ## Get an aminoacid sequence
 Get an aminoacid sequence for a given protein.
